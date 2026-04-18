@@ -1,0 +1,70 @@
+2026-04-18 16:41:18,801 [INFO] pipeline: Pipeline initialized | workspace=C:\Users\ACER\Downloads\Skripsi | interval=5.0h
+2026-04-18 16:41:18,802 [INFO] pipeline: Mode: SINGLE CYCLE
+2026-04-18 16:41:18,803 [INFO] pipeline: ======================================================================
+2026-04-18 16:41:18,803 [INFO] pipeline: CYCLE 1 STARTED — 2026-04-18T09:41:18.803482+00:00
+2026-04-18 16:41:18,803 [INFO] pipeline: ======================================================================
+2026-04-18 16:41:18,805 [INFO] pipeline_state: Snapshot: ProposalSkripsiV4.md → V4_cycle1.md
+2026-04-18 16:41:18,810 [INFO] pipeline: Paper snapshot saved: V4_cycle1.md
+2026-04-18 16:41:18,810 [INFO] pipeline: ▶ Starting Agent 1: Literature Scholar
+2026-04-18 16:41:18,811 [INFO] agents.literature_agent: ═══ Agent 1: Literature Scholar — Cycle 1 ═══
+2026-04-18 16:41:18,813 [INFO] agents.literature_agent: Existing KG entries: 0
+2026-04-18 16:41:18,814 [INFO] agents.literature_agent: Search topics: ['Cognitive SOC architecture AI autonomous', 'SOAR security orchestration automation response', 'Human-On-The-Loop cybersecurity SOC']
+2026-04-18 16:41:23,508 [WARNING] agents.literature_agent: Semantic Scholar returned 429 for: SOAR security orchestration automation response
+2026-04-18 16:41:30,047 [WARNING] agents.literature_agent: Semantic Scholar returned 429 for: Human-On-The-Loop cybersecurity SOC
+2026-04-18 16:41:36,253 [INFO] agents.literature_agent: Raw search results: 5
+2026-04-18 16:41:36,253 [INFO] agents.literature_agent: New unique entries: 5
+2026-04-18 16:41:36,254 [INFO] agents.literature_agent: Relevant new entries: 0
+2026-04-18 16:41:36,257 [INFO] agents.literature_agent: Knowledge graph total: 0 entries
+2026-04-18 16:41:36,258 [INFO] agents.literature_agent: Agent 1 complete: {
+  "topics_searched": [
+    "Cognitive SOC architecture AI autonomous",
+    "SOAR security orchestration automation response",
+    "Human-On-The-Loop cybersecurity SOC"
+  ],
+  "raw_results": 5,
+  "new_entries": 0,
+  "total_kg_entries": 0,
+  "top_entry": "none"
+}
+2026-04-18 16:41:36,259 [INFO] pipeline: ✓ Agent 1 complete
+2026-04-18 16:41:36,260 [INFO] pipeline: ▶ Starting Agent 2: Paper Reviewer
+2026-04-18 16:41:36,261 [INFO] agents.reviewer_agent: ═══ Agent 2: Paper Reviewer — Cycle 1 ═══
+2026-04-18 16:41:36,265 [INFO] agents.reviewer_agent: Parsed 27 sections
+2026-04-18 16:41:36,266 [INFO] agents.reviewer_agent: Knowledge graph: 0 entries
+2026-04-18 16:41:36,276 [INFO] agents.reviewer_agent: Review report: C:\Users\ACER\Downloads\Skripsi\thesis_agents\state\review_report_cycle1.md
+2026-04-18 16:41:36,276 [INFO] agents.reviewer_agent: Agent 2 complete: 9 findings ({'major': 8, 'minor': 1})
+2026-04-18 16:41:36,278 [INFO] pipeline: ✓ Agent 2 complete
+2026-04-18 16:41:36,280 [INFO] pipeline: ▶ Starting Agent 3: Paper Writer
+2026-04-18 16:41:36,281 [INFO] agents.writer_agent: ═══ Agent 3: Paper Writer — Cycle 1 ═══
+2026-04-18 16:41:36,304 [INFO] agents.writer_agent: Review findings to address: 9
+2026-04-18 16:41:36,309 [INFO] agents.writer_agent: Applied: Added methodology TODO: Methodology lacks clear 'baseline' specification....
+2026-04-18 16:41:36,310 [INFO] agents.writer_agent: New version: ProposalSkripsiV5.md
+2026-04-18 16:41:36,312 [INFO] agents.writer_agent: Agent 3 complete: 2 changes applied
+2026-04-18 16:41:36,313 [INFO] pipeline: ✓ Agent 3 complete
+2026-04-18 16:41:36,315 [INFO] pipeline: ▶ Starting Agent 4: Version Tracker
+2026-04-18 16:41:36,316 [INFO] agents.tracker_agent: ═══ Agent 4: Version Tracker — Cycle 1 ═══
+2026-04-18 16:41:36,351 [INFO] agents.tracker_agent: Diff saved: diff_cycle1.patch (+17/-13)
+2026-04-18 16:41:36,589 [INFO] agents.tracker_agent: Git initialized in C:\Users\ACER\Downloads\Skripsi
+2026-04-18 16:41:37,148 [INFO] agents.tracker_agent: Git commit: cycle-1: 2 changes applied | Renumbered equations: 9→6, 10→7, 11→8, 12→9, 13→10
+2026-04-18 16:41:37,153 [INFO] agents.tracker_agent: Dashboard updated: C:\Users\ACER\Downloads\Skripsi\thesis_agents\state\progress_dashboard.md
+2026-04-18 16:41:37,153 [INFO] agents.tracker_agent: Agent 4 complete: {'diff_stats': {'additions': 17, 'deletions': 13, 'delta': 4}, 'git_committed': True, 'changelog_updated': True, 'dashboard_updated': True, 'new_paper_version': 5}
+2026-04-18 16:41:37,153 [INFO] pipeline: ✓ Agent 4 complete
+2026-04-18 16:41:37,155 [INFO] pipeline: ======================================================================
+2026-04-18 16:41:37,155 [INFO] pipeline: CYCLE 1 COMPLETE
+2026-04-18 16:41:37,156 [INFO] pipeline: ======================================================================
+2026-04-18 16:41:37,156 [INFO] pipeline: Single cycle complete. Exiting.
+2026-04-18 16:49:05,990 [INFO] pipeline: Pipeline initialized | workspace=C:\Users\ACER\Downloads\Skripsi | interval=5.0h
+2026-04-18 16:49:05,991 [INFO] pipeline: Mode: SINGLE CYCLE
+2026-04-18 16:49:05,992 [INFO] pipeline: ======================================================================
+2026-04-18 16:49:05,993 [INFO] pipeline: CYCLE 2 STARTED -- 2026-04-18T09:49:05.992969+00:00
+2026-04-18 16:49:05,993 [INFO] pipeline: Paper: C:\Users\ACER\Downloads\Skripsi\ProposalSkripsiV5.md
+2026-04-18 16:49:05,993 [INFO] pipeline: ======================================================================
+2026-04-18 16:49:05,995 [INFO] pipeline_state: Snapshot: ProposalSkripsiV5.md -> V5_cycle2.md
+2026-04-18 16:49:05,995 [INFO] pipeline: Paper snapshot saved: V5_cycle2.md
+2026-04-18 16:49:05,995 [INFO] pipeline: >> Starting Agent 1: Literature Scholar
+2026-04-18 16:49:05,996 [INFO] agents.literature_agent: === Agent 1: Literature Scholar -- Cycle 2 ===
+2026-04-18 16:49:05,996 [INFO] agents.literature_agent: Existing KG entries: 0
+2026-04-18 16:49:05,997 [INFO] agents.literature_agent: Search topics: ['Random Forest threat classification IDS', 'concept drift detection intrusion detection', 'adaptive feedback loop machine learning security']
+2026-04-18 16:49:08,922 [WARNING] agents.literature_agent: Semantic Scholar returned 429 for: Random Forest threat classification IDS
+2026-04-18 16:49:17,590 [WARNING] agents.literature_agent: Semantic Scholar returned 429 for: concept drift detection intrusion detection
+2026-04-18 16:49:33,380 [WARNING] agents.literature_agent: Semantic Scholar returned 429 for: adaptive feedback loop machine learning security

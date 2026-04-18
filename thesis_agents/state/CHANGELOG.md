@@ -1,5 +1,17 @@
 # Thesis Pipeline Changelog
 
+## Cycle 2 -- 2026-04-18 09:49 UTC
+
+**Paper Version:** V6
+**Lines:** +4 / -4 (d+0)
+
+### Changes
+
+- Renumbered equations: 11→6, 12→7
+
+---
+
+
 ## Cycle 1 — 2026-04-18 09:41 UTC
 
 **Paper Version:** V5
