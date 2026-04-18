@@ -1,0 +1,58 @@
+[
+  {
+    "severity": "major",
+    "category": "structure",
+    "section": "Abstract",
+    "description": "Required IEEE section 'Abstract' not found or misnamed.",
+    "suggested_fix": "Add or rename section to include 'Abstract'."
+  },
+  {
+    "severity": "major",
+    "category": "unsupported_claim",
+    "section": "A. Latar Belakang",
+    "description": "Unsupported empirical claim near: '...ntah yang belum diverifikasi. studi menunjukkan bahwa tingkat false positive di lingkungan...'",
+    "suggested_fix": "Add citation from knowledge graph or literature."
+  },
+  {
+    "severity": "major",
+    "category": "unsupported_claim",
+    "section": "A. Peran Cyber Threat Intelligence (CTI) dalam Security Operations Center (SOC)",
+    "description": "Unsupported proven claim near: '...stematis dalam lingkungan soc terbukti mampu mereduksi beban kognitif analis dan mengaksel...'",
+    "suggested_fix": "Add citation from knowledge graph or literature."
+  },
+  {
+    "severity": "major",
+    "category": "unsupported_claim",
+    "section": "A. Layer 1: Data Acquisition & Fusion Space",
+    "description": "Unsupported proven claim near: '...)\n- $\\text{meta}_i$: metadata provenance (sumber, tanggal akuisisi, confidence awal)\n\n**3)...'",
+    "suggested_fix": "Add citation from knowledge graph or literature."
+  },
+  {
+    "severity": "major",
+    "category": "unsupported_claim",
+    "section": "C. Layer 3: Orchestration & Decision Logic Space",
+    "description": "Unsupported proven claim near: '...n terkonfirmasi dengan rantai provenance lengkap.\n- **jalur b — sintesis aturan ids:** ids...'",
+    "suggested_fix": "Add citation from knowledge graph or literature."
+  },
+  {
+    "severity": "major",
+    "category": "unsupported_claim",
+    "section": "B. Security Orchestration, Automation, and Response (SOAR) dan Agentic AI",
+    "description": "Unsupported significance claim near: '...lur kerja threat intelligence secara signifikan mengurangi waktu pemrosesan tanpa mengorba...'",
+    "suggested_fix": "Add citation from knowledge graph or literature."
+  },
+  {
+    "severity": "major",
+    "category": "unsupported_claim",
+    "section": "A. Latar Belakang",
+    "description": "Unsupported quantitative claim near: '... dan _burnout_ ditemukan pada lebih dari 70% analis soc \\[20\\], yang menurunkan kualitas p...'",
+    "suggested_fix": "Add citation from knowledge graph or literature."
+  },
+  {
+    "severity": "minor",
+    "category": "formalization",
+    "section": "Equations",
+    "description": "Equation numbering has gaps: missing {11, 12}.",
+    "suggested_fix": "Renumber equations sequentially."
+  }
+]
