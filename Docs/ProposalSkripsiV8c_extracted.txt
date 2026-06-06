@@ -1,0 +1,345 @@
+Adaptive Feedback Loop Based Cognitive SOC: Automated Network Threat Intelligence Pipeline 
+
+Joshua Kenneth Van Dyon Bina Nusantara UniversityJakarta, Indonesiajoshua.dyon@binus.ac.id
+
+
+
+Abstract—Modern Security Operations Centers (SOCs) face the challenges of massive alert volumes and limited human resources, which increase Mean Time to Respond (MTTR) and decrease detection accuracy. This study designs, implements, and evaluates a Cognitive SOC architecture that implements the Human-On-The-Loop (HOTL) paradigm through a four-layer pipeline: Data Acquisition & Fusion, Threat Analysis & Correlation (Random Forest, 15 features), Orchestration & Decision Logic (confidence-based routing with safety override), and Execution & Adaptive Feedback (Page-Hinkley drift detection). The system was implemented using open-source components (n8n, Wazuh, scikit-learn, Telegram) and evaluated through a 14-day experiment (960 IOC). The results demonstrated a 99.39% reduction in MTTR (from 1,789.6 seconds to 10.93 seconds, p = 0.016, Cohen's d = 14.2), a decrease in the False Positive Rate from 8.14% to 2.23% (a reduction of 72.6%), and an aggregate classification accuracy of 94.93% with weighted F1 = 0.949 and macro F1 = 0.908. The IDS rule generation agent synthesized 122 Wazuh rules with an acceptance rate of 92.6%. This architecture demonstrates that an enterprise-grade Cognitive SOC approach can be implemented using an open-source ecosystem for SOCs with limited resources.
+Keywords— Cognitive SOC, Human-On-The-Loop (HOTL), Agentic AI, Adaptive Feedback Loop, Cyber Threat Intelligence (CTI), Security Orchestration Automation and Response (SOAR).
+Introduction
+The massive contemporary cyber threat landscape forces the Security Operations Center (SOC) to process more than 22,000 weekly alerts in large-scale enterprise environments. This overwhelming volume of data triggers high false positives that can reach 68% of all alerts, burnout for more than 70% of SOC analysts, and resource allocation inefficiencies due to wasted time on the manual triage of low-priority alerts [1], [19]. This operational challenge is exacerbated by the concept drift phenomenon where the threat classification model degrades in accuracy as the attack pattern changes temporally. In the operational reality of Managed Security Service Providers (MSSP) in Indonesia, the process of handling Indicators of Compromise (IOC) from Commercial Threat Intelligence Platform (TIP) is still carried out manually, thereby widening the Window of Exposure, increasing Mean Time to Respond (MTTR), and creating the risk of human error that threatens the organization's security posture.
+To address the paucity of research from the 2022–2025 period examining the Human-On-The-Loop (HOTL) paradigm and the integration of Agent Swarm in low-code platforms, this study proposes a Cognitive SOC architecture based on the n8n platform. The investigation was focused on solving the problem of integrating Hybrid Autonomous AI Agents with the Adaptive Feedback Loop. These questions test how to design a reliable HOTL architecture, how significant its impact is on improving operational performance, the effectiveness of the Agent Swarm mechanism in autonomous triage and dynamic IDS rulemaking, the ability of the Adaptive Feedback Loop to use Page-Hinkley statistics to prevent concept drift.
+This research aims to make a contribution in strengthening the Human-Machine Teaming literature and democratizing cost-effective SOAR solution for medium-sized organizations.
+Literature Review
+The Role of Cyber Threat Intelligence (CTI) in Security Operation Centers (SOC)
+Cyber Threat Intelligence (CTI) has evolved into a cornerstone of modern cybersecurity, shifting operations from a reactive incident response posture to a proactive defense paradigm by reducing analyst cognitive loads and accelerating handling workflows [2]. Proactive strategies utilizing deep transfer learning can identify threats within hacker communities before widespread exploitation occurs [17]. At the operational layer, contemporary architectures implement API-based orchestration patterns and data exchange standards like STIX and TAXII to achieve real-time data sharing among heterogeneous security devices [6], [11]. Open-source platforms like IRIS Orchestrator demonstrate that connector-based setups successfully aggregate diverse threat feeds while maintaining peak performance characteristics [6], a concept supported by systematic reviews emphasizing that proper integration among varied security components, artificial intelligence (AI), and machine learning (ML) is vital to generating effective responses [7], [10].
+Security Orchestration, Automation, and Response (SOAR) and Agentic AI
+To further mitigate analyst fatigue and operational inefficiencies, the Security Orchestration, Automation, and Response (SOAR) paradigm automates repetitive tasks [25], [27]. Integrating AI-driven automated incident response within DevSecOps pipelines significantly minimizes Mean Time to Detect (MTTD) and Mean Time to Recover (MTTR) [1], illustrating how the convergence of SIEM, SOAR, and AI serves as a primary driver of modern cyber resilience [12]. Current research champions a hyper-automation framework powered by agentic AI to sustain adaptive automated responses alongside auditable human oversight mechanisms. Notably, agentic-LLM-based SOAR platforms can dynamically generate automation code to overcome the limitations of traditional no-code alternatives [4], while embedding SOAR within threat intelligence workflows markedly cuts processing times without sacrificing data accuracy [5]. This represents a critical evolution from static, rules-based automation toward next-generation SOAR platforms that utilize adaptive playbooks and reinforcement learning [13]. While cross-organizational empirical data reveals a significant correlation between higher SOC maturity levels and MTTR reductions, the absolute values remain contingent on specific organizational contexts and architectural choices [3].
+The Human-On-The-Loop (HOTL) Paradigm in Cybersecurity
+The transition from Human-In-The-Loop (HITL) to Human-On-The-Loop (HOTL) marks an important evolution in the supervisory control of AI-driven security infrastructures [26]. In an HOTL model, AI networks operate autonomously while human professionals act as supervisors who step in only during anomalous scenarios. Autonomous SOC frameworks that pair AI-agent automated triage with human validation strike an optimal operational balance while preserving clear audit trails and explanations for review [8]. This paradigm directly targets alert fatigue, a critical challenge where overwhelming alert volumes lead to performance drops and analyst exhaustion [19], [20], [21]. Emerging design patterns manage this via confidence-based routing—where high-confidence incidents are resolved autonomously and low-confidence events are escalated to human staff—coupled with agentic AI hyper-automation that delivers concise, explainable outputs to accelerate analyst validation [4], [8].
+The Impact of Automation on Mean Time to Respond (MTTR)
+The correlation between automation and incident response performance has been extensively documented in the recent literature. Zhang et al. proved that AI-based automated workflows are capable of processing threat intelligence with minimal latency, enabling near-real-time responses [1]. This reduction in processing time directly mitigates the Window of Exposure and limits the dwell time of threat actors. In the context of SIEM-based monitoring, an evaluation of Wazuh's effectiveness in a cloud environment detected 1,774 security alerts in one week of testing, confirming its adequate real-time detection capabilities [14], [22].
+Cross-organizational empirical studies confirm that investment in SOAR architecture is significantly correlated with a reduction in MTTR [3]. Mahadi et al. extend these findings by proposing a new generation of Emergency Operations Center (EOC) architecture that integrates predictive analytics, threat intelligence, and automation to improve early detection of threats and reduce response times in financial institutions [9].
+Methodology
+Systems Architecture and Experimental 
+The proposed Cognitive SOC Architecture experiment implements an end-to-end threat intelligence pipeline based on the Human-On-The-Loop (HOTL) paradigm, which is decomposed into four functional layers: (1) Data Acquisition & Fusion, (2) Threat Analysis & Correlation, (3) Orchestration & Decision Logic, and (4) Execution & Adaptive Feedback. Each layer operates as a modular processing stage coordinated by the n8n orchestration engine (TABLE I, Line 2). 
+Figure 1 illustrates the end-to-end data flow across the four layers. This architecture adopts the HOTL paradigm that fundamentally transforms the human role from an active validator on every decision (HITL) to a strategic supervisor who intervenes only in anomalous conditions or model uncertainty [4], [8].
+Cognitive SOC Architecture Components
+Components
+Technology
+Layer
+Function
+Threat Intelligence Source
+TIP API
+Layer 1
+Provides a real-time feed of IOC (IP, Domain, Hash File) data via an authenticated REST API.
+Orchestration Machine (Orchestrator)
+n8n (Self-Hosted, Docker)
+Layer 3
+A central hub for workflow management, scheduling, and whole-component API integration.
+Threat Classification ML Module
+Python / scikit-learn (Random Forest)
+Layer 2
+Processing and classifying IOCs based on contextual features; Generate a risk score and a threat category label.
+Detection & Logging System (SIEM)
+Wazuh Manager (Host Windows 11)
+Layer 4
+Incident logging, data correlation (enrichment), and IDS rule management.
+Target Endpoint
+VM Linux Ubuntu 22.04 LTS + Wazuh Agent
+Layer 4
+Simulates an endpoint monitored in a SOC network.
+HOTL Interface (Alerting & Feedback)
+Telegram Bot API
+Layer 4
+Push notification channels to human analysts; supports HTML formatting and interactive buttons for validation and correction actions (feedback loop).
+Figure 1. Cognitive SOC Architecture: Four-Layer PipelineFigure 1. Cognitive SOC Architecture: Four-Layer Pipeline   
+Figure 1. Cognitive SOC Architecture: Four-Layer Pipeline
+Figure 1. Cognitive SOC Architecture: Four-Layer Pipeline
+Layer 1: Data Acquisition & Fusion Space
+The first layer is responsible for ingesting, normalizing, and deduplicating raw threat intelligence telemetry into a standardized representation that is ready to be processed by the downstream analytical layer.
+1) Ingesting Telemetry. The pipeline is initiated through a scheduled polling REST API mechanism that acquires Indicators of Compromise (IOC)—including IP addresses, domain names, and file hashes—from the Threat Intelligence Platform (TABLE I, Line 1). The n8n orchestrator executes polls at configurable intervals, converting asynchronous intelligence publications into deterministic ingestion schedules.
+
+2) ETL Phase & Parsing. The raw JSON payload of the API undergoes an Extract-Transform-Load (ETL) process that is formalized as a normalization transformation. Adopting the Layer 1 architecture principles of Zhang et al. [1], this module transforms heterogeneous telemetry into a structured representation. Suppose the respective sets of data sources produce a stream of events with heterogeneous schemas. The normalization transform maps each raw event to a standardized bundle representation:
+
+
+where: - : IOC unique identifier -: normalization timestamp (epoch seconds) - : contextual feature vector (d=15 after encoding, see TABLE II) -  : set of contextual relationships (e.g., associated-with, indicates) -  : provenance metadata (source, date of acquisition, initial confidence).
+
+3) Temporal Fusion & Deduplication. To eliminate redundant indicators between ingesting cycles, temporal fusion operators aggregate bundles using temporal-similarity merge criteria:
+
+
+where  denotes the temporal window for deduplication and represents the cosine similarity threshold for the identification of duplicate IOCs across cycles. On the current single-source implementation (TIP only), it operates as an identity function with intra-source deduplication; however, these operators are designed in a source-agnostic manner to support multi-source fusion extensions without architectural modifications.
+The Layer 1 output is a streamed and deduplicated IOC bundle, each carrying a full-featured vector ready for classification. This flow is passed to the Threat Analysis layer for risk assessment.
+
+Layer 2: Threat Analysis & Correlation Space
+After receiving the normalized IOC bundle from Layer 1, the second layer performs a supervised classification to assign each indicator of threat severity labels and associated confidence scores. This layer includes four sequential phases: feature engineering, training corpus construction, ensemble classification, and posterior confidence estimation.
+Each IOC  bundle is transformed into  feature vector through extraction and encoding of nine contextual attributes as specified in TABLE II.
+IOC Feature Vector For Random Forest Classification
+Feature Name
+Type
+Encoding
+Example Values
+indicator_type
+Categorical
+One-hot (3 column: IP, Domain, Hash)
+[1,0,0]
+tip_reputation_score
+Numerical (0–100)
+Min-max normalization [0.1]
+0.87
+geolocation_risk
+Categorical
+Ordinal encoding (High-risk country=2, Medium=1, Low=0)
+2
+asn_reputation
+Numerical (0–1)
+Direct (normalized from TIP)
+0.65
+feed_frequency
+Numerical
+Log-transform, then min-max normalisasi
+0.42
+threat_category
+Categorical
+One-hot (Malware, Phishing, C2, Exploit, Other)
+[0,1,0,0,0]
+
+Total dimensions after encoding: 15 features (3 columns of one-hot indicator_type + 5 columns of one-hot threat_category + 7 scalar features = 15). All numerical features are normalized to the range [0,1]. The active_days_count feature measures the number of unique days in which IOCs are reported to be active by various feeds, providing additional information about the persistence of threats.
+
+The Random Forest model was trained using a labeled IOC dataset constructed from two complementary sources:
+
+(a) Threat Intelligence Platform historical data (N = 4,200): Labeled IOC samples collected during the 3 months prior to the experiment. Class labels are assigned through a deterministic  mapping function that transforms the TIP’s severity score into a taxonomy of four classes:
+
+
+
+Interval boundaries (25, 55, 80) were derived from a quartile distribution analysis of TIP’s 4,200 historical samples and validated in consultation with one senior SOC analyst (>5 years of experience). This non-equidistant distribution reflects the empirical proportions of threats commonly observed in SOC operations [19].
+
+(b) CTU-13 dataset (Scenarios 1, 2, 9) (N = 800): Additional samples were extracted from the CTU-13 flows dataset [15], covering variations of the Neris, Rbot, and Murlo botnets. Since CTU-13 is a network flow dataset (not IOC), the following feature imputation procedures are applied: (a) the destination IP address is extracted as IOC; (b) tip_reputation_score imputed using an archived VirusTotal lookup; 
+
+(c) geolocation_risk obtained through GeoIP/ASN registry lookup; (d) asn_reputation calculated based on the proportion of flow perASN; (e) Temporal features are imputed from flow-level statistical aggregation. Class labels are set based on CTU-13 ground truth: Botnet flow → High/Critical, flow Normal/Background → Low.
+
+Total dataset: 5,000 samples. Grade distribution: Low 2,250 (45%), Medium 1,500 (30%), High 900 (18%), Critical 350 (7%). Class imbalance is handled via class_weight='balanced' in the scikit-learn RandomForestClassifier. The dataset was divided 80:20 (4,000 training: 1,000 validations) using stratified split.
+
+Labeling Limitations: All labeling is done by a single labeler (author), so inter-rater reliability (e.g., Cohen's κ) cannot be reported. These limitations are mitigated through: (1) the use of the deterministic mapping function L that eliminates subjectivity in TIP's data, and (2) the use of CTU-13's built-in ground truth.
+
+The  Random Forest model consists of  ensemble  decision trees. For each  IOC feature vector, the threat class is predicted through majority voting:
+
+Where  is the threat class set and  is the encoded feature vector.
+
+Confidence score quantifies the certainty of a prediction as the proportion of trees that agree with the majority class:
+
+Layer 2 output is  classified IOC tuple that is passed to the Orchestration layer for automated routing decisions.
+
+Layer 3: Orchestration & Decision Logic Space
+The third layer implements automated routing logic that governs the pipeline's response to each classified IOC. Realized as a deterministic decision engine in the n8n orchestrator, this layer maps each classified indicator to one of three mitigation paths based on the threat class and associated confidence score.
+
+1) Decision Function. The routing policy is formalized as a piecewise D decision function over the combined threat label and confidence score space:
+
+
+
+where  and are the parameters calibrated through ROC curve analysis and precision-recall curves on the validation dataset. Three design principles govern this routing logic:
+Autonomous Tier (): IOC high-confidence, high-severity is passed directly to Layer 4 without human intervention, enabling sub-second MTTR for unambiguous threats. HOTL Escalation Tier (): The borderline-confidence IOC is forwarded to the analyst's Telegram dashboard for supervisory review, maintaining human judgment on uncertain cases. Safety Override: IOCs classified as Critical are never directed to log_review regardless of confidence, preventing operational failures where critical threats are silently missed.
+
+The  boundary conditions are explicitly mapped to escalate_HOTL as a conservative policy. Threshold sensitivity analysis at intervals of ±0.05 was reported to quantify the impact on FPR and F1-Score.
+
+2) Parallel Execution Fork. For IOCs directed to autonomous_block, Layer 3 triggers two downstream processes simultaneously:
+•Path A — Autonomous Triage: The IOC is enriched with contextual metadata and recorded as a confirmed threat with a complete chain of provenance.
+•Path B — IDS Rule Synthesis: The IDS Rule Generation Agent accepts the IOC and synthesizes the User-Friendly detection rules (XML format) tailored to the indicator type: network connection rules for malicious IPs, DNS query rules for flagged domains, and file-hash blacklist rules for malicious binaries.
+
+Both paths execute concurrently in the n8n orchestrator, ensuring that rulemaking doesn't introduce additional latency to the triage pipeline. The synthesized rule specification is passed to Layer 4 for deployment.
+
+Layer 4: Execution & Adaptive Feedback Space
+
+Figure 2. Adaptive Feedback Loop - State-Transition Diagram (Layer 4)
+The fourth layer completes the pipeline cycle by executing defensive actions and establishing a closed-loop mechanism for continuous model improvement. This layer includes three functional units: rule deployment, analyst notifications, and adaptive feedback.
+
+Automated Rule Deployment. The detection rules synthesized by Layer 3 are deployed to Wazuh Manager (TABLE I, Line 4) via the Wazuh RESTful API, without the need to manually restart the service. After a successful deployment, the rule becomes active directly on all monitored endpoints (TABLE I, Line 5), closing the temporal gap between threat classification and defensive posture updates.
+
+HOTL Notification Interface. Regardless of the routing tier, each processed IOC generates a structured notification that is sent to the analyst's Telegram dashboard (TABLE I, Line 6). Notifications for autonomous_block actions include a post-hoc summary of the deployed rules with options to revise or rollback. Notifications for escalate_HOTL actions present IOC details, classification rationalization, and interactive buttons for validation, label correction, or rejection. This design ensures analysts maintain supervisory awareness without becoming a bottleneck on routine approvals.
+
+Adaptive Feedback Loop. Feedback mechanisms are at the core of the Cognitive SOC architecture, enabling continuous model adaptation to the evolving threat landscape. This mechanism is formalized as follows.
+
+Suppose  declares a feedback buffer at time t, which accumulates analyst corrections since the last retraining cycle:
+
+
+
+Trigger Retraining Model retraining is initiated when the buffer reaches the minimum accumulation threshold:
+
+
+
+At an estimated daily correction rate of 8–12% at ~50–100 IOCs, about 4–12 corrections accumulate per day, resulting in a trigger window of 4–12 days. The weekly periodic schedule serves as a safeguard to ensure that retraining occurs even in gradual conditionsthat do not result in sufficient analyst corrections. Sensitivity analysis to  variation is reported.
+
+The updated model is trained on a combined corpus of historical training and accumulated feedback:
+
+
+Full retraining (warm_start=False) is used to ensure that all estimators in the ensemble reflect the current data distribution and prevent catastrophic forgetting of historical patterns.
+
+To prevent degraded model deployments, candidate models must demonstrate statistically significant improvements. Suppose  and  are the F1-Score model incumbent and the candidate on the fold  of the K-fold cross-validation. Deployment is carried out only if:
+
+
+
+using the Wilcoxon signed-rank test.
+
+To detect concept drift without relying entirely on analyst corrections, the Page-Hinkley test [16] monitors the flow of confidence scores:
+
+Where  is the average running confidence score,  is the tolerance of the magnitude of the change, and the drift alarm is triggered if , following the calibration recommendations of Jemili et al. [16]. When the drift alarm is active, retraining is accelerated though .
+
+Each version of the model is logged with metadata (retraining date, sample count delta, metric change, significance test results) to maintain a complete audit trail for reproducibility.
+
+Layer 4 output flows back to Layer 2 as a retrained model, closing the adaptive loop. This cyclic architecture ensures the Cognitive SOC pipeline is not degraded under distribution shift, a critical property for sustainable autonomous operations [16], [29].
+
+Architectural Position on AIR Architecture [1]
+This subsection consolidates the relationship between the proposed Cognitive SOC pipeline and the four-layer Automated Incident Response (AIR) architecture of Zhang et al. [1], which serves as the main theoretical reference point. TABLE III summarizes the correspondence.
+
+Layer's Correspondence with the AIR Architecture Zhang et al. [1]
+AIR [1]
+AIR Implementation
+Cognitive SOC
+Rationalization of Simplification
+Layer 1: Multi-Source Log Fusion
+STIX/TAXII protocol, heterogeneous log fusion
+Internal-JSON normalization via n8n (Eq. 1–2)
+STIX/TAXII requires infrastructure beyond the scope of the proof-of-concept. The fusion operator is designed to be format-agnostic.
+Layer 2: Attention-LSTM Detection
+Temporal attention mechanisms for sequential threat pattern recognition
+Random Forest ensemble classification (Eq. 3–4)
+(a) Higher decision transparency for HOTL contexts [8]; (b) computational efficiency on low-code platforms; (c) overfitting resilience on moderate datasets (~5,000 samples) [23], [24]. Limitations: cannot model sequential multi-stage attacks.
+Layer 3: Bayesian Game-Theoretic Decision
+Updating Bayesian posterior attacker type; Nash equilibrium in 97.3% of adversarial scenarios
+Threshold-based deterministic routing D (Eq. 5)
+The lab environment does not provide adversarial interaction data for posterior updating.  approximates  (Eq. 7) under the assumption of uniform and static attacker types.
+Layer 4: DRL Optimization
+Deep RL with fuzzy logic reward functions for real-time policy optimization.
+Adaptive Feedback Loop with Page-Hinkley drift detection (Eq. 9–13)
+Offline feedback replaces online RL; manual threshold calibration instead of agent-driven.
+
+For reference, Zhang et al. [1] model the defender response as a Bayesian game in which the  posterior type of attacker is updated through:
+
+
+
+and the optimal  Defender strategy is obtained as:
+
+
+
+where  is the Defender utility function, is the optimal strategy of the Attacker type, and  is the observation sequence up to time .
+
+This study does not fully implement the game-theoretical framework. The deterministic policy D (Equation 5) is a case-specific approximation of the following two simplification assumptions: (1) the prior uniform and stationary attacker type, and (2) the defender utility is reduced to a binary confidence threshold. Extensions to posterior Bayesian updates—by incorporating analyst feedback signals and IOC temporal patterns as observation sequences —are the main direction of future work.
+Experiments and Results
+Experimental Framework and Design
+This research adopts a Constructive Research approach, which is to build a technological artifact in the form of a Cognitive SOC Architecture (§III) system and evaluate its performance empirically. This approach includes two main evaluation dimensions:
+
+System Effectiveness (Quantitative): Measure the impact of AI-based automation on the speed, accuracy, and efficiency of incident response using cybersecurity industry standard metrics.
+
+The evaluation of the effectiveness of the system was carried out in a sequential comparison scheme, where the baseline (manual) phase was carried out first for 7 days, followed by the experimental (automatic) phase for the next 7 days. This sequential design was chosen due to resource limitations that did not allow for the parallel operation of two teams of analysts simultaneously. To mitigate confounding variables due to changes in the threat landscape between periods, IOC volumes per day were recorded and reported for both conditions, and statistical analysis took into account volume variations as covariates.
+
+Experiments have been conducted in a laboratory environment that simulates SOC infrastructure. The use of virtualization technology (Virtual Machine) ensures the reproducibility and isolation of experiments.
+
+System Effectiveness Evaluation Metrics
+System effectiveness is measured using four standard quantitative metrics:
+
+Accuracy
+
+
+Where TP (True Positive) is a real threat that is classified as true, TN (True Negative) is a benign IOC that is identified as true, FP (False Positive) is a benign IOC that is misclassified as a threat, and FN (False Negative) is a real threat that fails to be detected.
+
+Mean Time to Respond (MTTR)
+
+Where N is the total number of incidents,  is the i-th incident detection timestamp, and  is the timestamp resolution.
+
+False Positive Rate (FPR)
+
+
+
+FPR measures the proportion of benign IOCs that are misidentified as threats. High FPR causes alert fatigue in SOC analysts [19], [21].
+
+F1-Score
+
+where:
+
+
+5) Per-Class Metric Reporting. Given the unbalanced distribution of classes (Critical = 7%), aggregate reporting alone can hide poor performance in the classes that are operationally most important. Therefore, the evaluation will report: - Precision, Recall, and F1-Score per class for all four threat classes - Confusion matrix 4×4 for visualization of misclassification patterns - Macro-averaged F1 and weighted F1 for a comprehensive picture of performance in both minority and majority classes
+
+Data Analysis Plan and Statistical Design
+All experimental data is managed and analyzed through the following pipelines:
+Automated Data Collection: System logs, ML classification results, and response timestamps are collected via n8n logging to the local SQLite database.
+Preprocessing: Data is cleaned of duplication and outliers using Python scripts (pandas).
+Calculation of Metrics: The Accuracy, MTTR, FPR, and F1-Score metrics (Equations 14–18) are calculated using the scikit-learn module.
+Baseline Comparison: Automated system results are statistically compared to manual processes. The Shapiro-Wilk normality test is applied first; if normality is met, a paired t-test with α = 0.05 is used, while if not, a Wilcoxon signed-rank test is used. Effect size was reported using Cohen's d.
+
+Statistical Power Analysis. The 7+7-day design results in N = 7 paired observations per metric. A priori power analysis using GPower (bidirectional paired t-test, α = 0.05, N = 7) showed that this design had sufficient power (1 − β ≥ 0.80) only for large effect sizes* (Cohen's d ≥ 1.4). To mitigate these limitations, additional analysis was performed using per-IOC aggregation (N ≈ 350–700 observations per phase) as sensitivity analysis.
+
+Double Comparison Correction. Since the four primary metrics were tested simultaneously, a Holm-Bonferroni correction was applied to control for the family-wise error rate at α = 0.05.
+
+Sequential Design Justification. Crossover or A/B split designs are not feasible due to resource constraints. Mitigation: (a) recording of daily IOC volumes as covariates, (b) reporting of daily metric trends, and (c) explicit recognition as limitations of internal validity.
+
+Ablation Study. To measure the individual contribution of architectural components:
+Ablation A (No Feedback Loop): Complete pipeline without Adaptive Feedback Loop—measures the impact of feedback on accuracy.
+Ablation B (Without IDS Rule Generation): Autonomous triage without automated IDS rule generation—measures the impact on MTTR.
+Ablation C (Static vs. Calibrated Threshold): Performance D with default threshold vs. calibrated through ROC/PR analysis.
+
+Visualization: Results are visualized using matplotlib/seaborn.
+
+Interpretation: The findings were positioned against the performance metrics of Zhang et al. [1] (F1-Score 93%, latency 58.3ms).
+
+Threats to Validity
+The study acknowledges several threats to validity:
+Internal Validity: The sequential experimental design (7+7 days) introduces potential confounding variables in the form of threat landscape changes between periods. Mitigation was carried out through daily IOC volume recording and covariate analysis. The learning effect on analysts who are increasingly familiar with the system in the second week can affect MTTR results.
+External Validity: A laboratory environment with a Virtual Machine does not fully represent the complexity of enterprise production SOC. The volume of IOC in the lab environment (~50-100 IOC/day) is lower than that of large-scale production SOC (~500-1,000 IOC/day).
+Construct Validity: The use of 500 mock IOCs in stress test scenarios may not reflect the distribution of IOCs in real threat environments. Training datasets from TIP historical data can be biased against certain types of threats.
+Construct Validity (Multi-Source): The architecture is designed for multi-source fusion (Equations 1–2), but only single-source instances (TIP) are experimentally validated.
+Experimental Results and Analysis
+This section presents the results of experiments that have been conducted over 14 working days (7 days of manual baseline phase + 7 days of automatic Cognitive SOC phase) in a controlled laboratory environment.
+1) Experimental period, a total of 960 IOCs were processed: 467 IOCs in the manual phase and 493 IOCs in the automatic phase. The average daily volume in the manual phase (66.7 IOC/day) and the automatic phase (70.4 IOC/day) did not differ significantly (p = 0.535), confirming that the volume variation between phases was not a confounding variable.
+
+2) Evaluation on 493 IOC automatic phase yielded an overall accuracy of 94.93%, compared to 88.2% in the manual phase. The weighted F1-Score reaches 0.949. The False Positive Rate (FPR) was successfully reduced from 8.14% (manual) to 2.23% (automatic), representing a reduction in FPR of 72.6% which had a direct impact on the mitigation of alert fatigue.
+
+3) The average MTTR was drastically reduced from 1,789.6 seconds (~29.8 minutes) in the manual phase to just 10.93 seconds in the automatic phase. This represents a reduction of 99.39% (Wilcoxon signed-rank p = 0.016). A progressive downward trend in MTTR during the automatic phase indicates pipeline stabilization.
+
+
+
+Figure 3. Experimental Results & Operational Performance Metrics
+4) During the automated phase, Agent Swarm operates without human intervention for 68.4% of IOCs. Agent synthesized 122 IDS rules, of which 113 rules (92.6%) were accepted without modification by the analyst, with an average latency of synthesis of only 2.3 seconds.
+
+5) During the experiment, 31 analyst corrections were collected. The Page-Hinkley drift detection statistics were observed to be stable with a maximum value of 12.7 (below the threshold of 50), indicating no significant concept drift. Prospective retraining simulations on the combined data increased the macro F1-Score from 0.934 to 0.941, but have not yet reached statistical significance for automated deployment.
+
+6) Calibration threshold at a confidence level of 0.85 proved to be an optimal point that balances autonomous latency and escalation loads. The ablation study showed that the absence of automatic IDS Rule Generation would increase the MTTR from 10.93 to 847.3 seconds.
+Per-Class Results and Confusion Matrix
+
+Figure 4. Classification Performance: Confusion Matrix & Per-Class Metrics Automated Phase
+Conclusion and Future Work
+This research has successfully designed, implemented, and evaluated a Cognitive SOC architecture that integrates the Human-On-The-Loop (HOTL), Hybrid Autonomous AI Agent, and Adaptive Feedback Loop paradigms in a low-code orchestration (n8n) platform. Key conclusions include: The architecture has been shown to be highly effective in accelerating incident response, with a 99.39% reduction in MTTR (from 1,789.6 seconds to 10.93 seconds). The Random Forest-based intelligent classification system achieved an accuracy of 94.93% and succeeded in reducing the FPR from 8.14% to 2.23%, substantially overcoming the issue of alert fatigue. Agent Swarm successfully automated 68.4% of IOC triage, synthesizing IDS rules with an acceptance rate of 92.6%. The Adaptive Feedback Loop concept operates stably and collects vital analytical inputs, although the short test duration limits the execution of full-cycle retraining.
+Although the system has proven its feasibility, there are several areas of strategic development: - Duration of the experiment: The 14-day working period is sufficient for proof-of-concept evaluation but too short to comprehensively evaluate the effectiveness of concept drift mitigation. Future work can extend the duration or use historical data replay to simulate a longer period. - Single Model: This study only evaluated Random Forest as a classifier. Comparisons with alternative models (Gradient Boosted Trees, SVM, Neural Networks) and in particular temporal sequence-based models such as Attention-LSTM [1] will strengthen the generalizability of the findings. - No Reinforcement Learning-Based Optimization: Zhang et al. [1] implemented Deep Reinforcement Learning (DRL) with fuzzy logic-based reward functions on Layer 4 of the AIR architecture for real-time response policy optimization. The reward function weighs defense success, resource consumption, and false positive costs:
+
+
+where , , , is a fuzzy membership function and  is adaptive weighting (Zhang et al. [1], Equation 8 in the original source). This Cognitive SOC architecture does not include DRL components; Policy optimization is done offline through Adaptive Feedback Loop (§III.D) and manual threshold calibration. DRL agent integration for  and  real-time threshold optimization. Since this study evaluates the Cognitive SOC architecture solely from a technical and quantitative performance standpoint, future work should incorporate User Acceptance Testing (UAT) using the System Usability Scale (SUS) to evaluate the psychological and cognitive impacts of the HOTL interface on professional SOC analysts.
+References
+J. Zhang, S. Li, W. Huang, H. Jing, and Q. Zhang, “Design and Computational Modeling of an AI-Based Automated Cybersecurity Incident Response System,” IEEE Access, 2025. DOI: 10.1109/access.2025.3603975
+U. F. Abdulrazaq, V. E. Kulugh, S. E. Eluwah, and I. A. Mohammed, “Operational Integration of Cyber Threat Intelligence in Modern Security Operations Centers: A Design Science Approach,” Int. J. Comput. Intell. Security Res. (IJCISR), vol. 4, no. 1, pp. 84–94, 2024.
+S. Sohal, “Correlating SOC Maturity Levels with Incident Response Outcomes: An Empirical Study,” Int. J. Appl. Mathematics, 2024. DOI: 10.12732/ijam.v38i10s.1056
+Ismail, R. Kurnia, Z. A. Brata, G. A. Nelistiani, and S. Heo, “Toward Robust Security Orchestration and Automated Response in Security Operations Centers with a Hyper-Automation Approach Using Agentic Artificial Intelligence,” Information, vol. 16, no. 5, 2025. DOI: 10.3390/info16050365
+H. Pigg, “Threat Intelligence Automation and Optimization Through SOAR Integration,” Master’s thesis, Univ. Jyväskylä, Jyväskylä, Finland, 2024.
+V. G. Bilali, D. Kosyvas, and T. Theodoropoulos, "Iris Advanced Threat Intelligence Orchestrator—A Way to Manage Cybersecurity Challenges of IoT Ecosystems in Smart Cities," IRIS H2020 Project Deliverable D3.4, Zenodo, 2023. Available: https://zenodo.org/records/7510996. [Accessed: May 26, 2026].
+M. Mennuni, “An Analysis of SOC Monitoring Systems,” Doctoral dissertation, Politecnico di Torino, Turin, Italy, 2024.
+A. Mareedu, “Autonomous Security Operations Centers (SOC): AI Agents for Threat Triage, Response, and Orchestration,” Int. J. Emerging Res. Eng. Technol. (IJERET), 2025. DOI: 10.63282/3050-922x.ijeret-v6i2p108
+S. M. I. Mahadi, S. K. Mallik, N. R. Shatu, and M. Rahman, “From Reactive to Proactive: Engineering a Next-Generation Cyber Threat Response Emergency Operations Center (EOC) for Financial Institutions,” Amer. J. Geospatial Technol., vol. 4, no. 1, 2025. DOI: 10.54536/ajgt.v4i1.5355
+M. Khayat, E. Barka, M. A. Serhani, F. Sallabi, K. Shuaib, and H. M. Khater, “Empowering Security Operation Center with Artificial Intelligence and Machine Learning—A Systematic Literature Review,” IEEE Access, vol. 13, pp. 14710–14740, 2025. DOI: 10.1109/ACCESS.2025.3532951
+O. Krauss and K. Papesh, “Analysis of Threat Intelligence Information Exchange via the STIX Standard,” in Proc. 2022 Int. Conf. Electrical, Computer, Communications and Mechatronics Engineering (ICECCME), 2022. DOI: 10.1109/ICECCME55909.2022.9988073
+S. Ramakrishnan and D. R. Chittibala, “Enhancing Cyber Resilience: Convergence of SIEM, SOAR, and AI in 2024,” Int. J. Computing and Engineering, vol. 5, no. 2, pp. 36–44, Mar. 2024. DOI: 10.47941/ijce.1754
+S. R. Nandi, “Next-Generation SOAR Systems for AI-Enhanced Security Automation,” J. Comput. Sci. Technol. Studies, vol. 7, no. 8, pp. 540–546, 2025. DOI: 10.32996/jcsts.2025.7.8.62
+W. S. Ahmed and Z. T. M. AL-Ta’I, “Analysis of Wazuh SIEM’s Effectiveness in Cloud Security Monitoring,” J. Cybersecurity Inf. Manag., 2024. DOI: 10.54216/JCIM.150119
+I. Ullah and Q. H. Mahmoud, “A Scheme for Generating a Dataset for Anomalous Activity Detection in IoT Networks,” in Proc. Canadian Conf. on AI, Lecture Notes in Computer Science, vol. 12109, Springer, 2020. DOI: 10.1007/978-3-030-47358-7_52. Catatan: Dataset CTU-13 yang digunakan dalam penelitian ini berasal dari referensi primer: S. García, M. Grill, J. Stiborek, and A. Zunino, “An Empirical Comparison of Botnet Detection Methods,” Computers & Security, vol. 45, pp. 100–123, Sep. 2014. DOI: 10.1016/j.cose.2014.05.011.
+F. Jemili, K. Jouini, and O. Korbaa, “Intrusion Detection Based on Concept Drift Detection and Online Incremental Learning,” Int. J. Pervasive Computing and Communications, vol. 21, no. 1, pp. 81–115, Oct. 2024. DOI: 10.1108/IJPCC-12-2023-0358
+B. Ampel, S. Samtani, H. Zhu, and H. Chen, “Creating Proactive Cyber Threat Intelligence with Hacker Exploit Labels: A Deep Transfer Learning Approach,” MIS Quarterly, vol. 48, no. 1, pp. 137–166, Mar. 2024. DOI: 10.25300/MISQ/2022/15392 
+F. Jalalvand, M. B. Chhetri, S. Nepal, and C. Paris, “Alert Prioritisation in Security Operations Centres: A Systematic Survey on Criteria and Methods,” ACM Computing Surveys, vol. 57, no. 2, Art. 42, Nov. 2024. DOI: 10.1145/3695462
+C. Nobles, “Stress, Burnout, and Security Fatigue in Cybersecurity: A Human Factors Problem,” HOLISTICA – J. Business and Public Administration, vol. 13, no. 1, pp. 49–72, Jun. 2022. DOI: 10.2478/hjbpa-2022-0003
+S. Tariq, M. B. Chhetri, S. Nepal, and C. Paris, “Alert Fatigue in Security Operations Centres: Research Challenges and Opportunities,” ACM Computing Surveys, Mar. 2025. DOI: 10.1145/3723158
+M. R. Islam and R. Rafique, “Wazuh SIEM for Cyber Security and Threat Mitigation in Apparel Industries,” Int. J. Eng. Manag. and Manufacturing, vol. 9, no. 4, 2024. DOI: 10.26776/ijemm.09.04.2024.02
+Y. Li, L. Zuo, C. Song, and F. Yang, “IDRandom-Forest: Advanced Random Forest for Real-Time Intrusion Detection,” IEEE Access, vol. 12, pp. 113610–113622, 2024. DOI: 10.1109/ACCESS.2024.3443408
+W. Chen, H. Zhang, Y. Zhou, and L. Liu, “Research on Intrusion Detection Based on an Enhanced Random Forest Algorithm,” Appl. Sci., vol. 14, no. 2, Art. 714, Jan. 2024. DOI: 10.3390/app14020714
+U. M. Bartwal, S. Mukhopadhyay, R. Negi, and S. K. Shukla, “Security Orchestration, Automation, and Response Engine for Deployment of Behavioural Honeypots,” in Proc. 2022 IEEE Conf. Dependable and Secure Computing (DSC), 2022. DOI: 10.1109/DSC54232.2022.9888828
+A. Tsamados, L. Floridi, and M. Taddeo, “Human Control of AI Systems: From Supervision to Teaming,” Minds and Machines, vol. 34, Art. 54, 2024. DOI: 10.1007/s11023-024-09700-z
+D. Roche and S. Dowling, “Elevating Cybersecurity Posture by Implementing SOAR,” in Proc. 2023 Cyber Research Conf.-Ireland (Cyber-RCI), IEEE, 2023, pp. 1–7.
+R. Syed, “Cybersecurity Vulnerability Management: A Systematic Review Approach,” Comput. Security, vol. 137, Art. 103616, Feb. 2024. DOI: 10.1016/j.cose.2023.103616
+[28] J. Lu, A. Liu, F. Dong, F. Gu, J. Gama, and G. Zhang, “Learning under Concept Drift: A Review,” IEEE Trans. Knowledge and Data Engineering, vol. 31, no. 12, pp. 2346–2363, Dec. 2019. DOI: 10.1109/TKDE.2018.2876857
+
+

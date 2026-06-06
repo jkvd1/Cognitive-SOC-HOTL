@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pickle
+*.pkl
+.ipynb_checkpoints
+.pytest_cache/
+
+# OS/System
+.DS_Store
+Thumbs.db
+*.tmp
+~$*.docx
+
+# VS Code / IDE
+.vscode/
+.idea/
+.agent/
+.gemini/
+
+# Project Specific
+*.log
+database/cognitive_soc_logs.db
+Data/cognitive_soc_logs.db

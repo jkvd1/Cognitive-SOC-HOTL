@@ -1,0 +1,1119 @@
+================================================================================
+IMPLEMENTASI PIPELINE INTELIJEN ANCAMAN JARINGAN OTOMATIS MENGGUNAKAN N8N
+DENGAN INTEGRASI ALGORITMA MACHINE LEARNING UNTUK PERCEPATAN RESPONS INSIDEN
+================================================================================
+
+Joshua Kenneth Van Dyon
+Bina Nusantara University
+Jakarta, Indonesia
+joshua.dyon@binus.ac.id
+
+--------------------------------------------------------------------------------
+ABSTRAK
+--------------------------------------------------------------------------------
+
+Pusat Operasi Keamanan (SOC) modern menghadapi tantangan signifikan berupa 
+volume peringatan yang masif dan keterbatasan sumber daya manusia, yang 
+berdampak pada tingginya Mean Time to Respond (MTTR). Proses ingestion 
+indikator ancaman (IOC) yang dilakukan secara manual sering kali menyebabkan 
+latensi deteksi dan tingginya tingkat positif palsu (false positive). 
+
+Penelitian ini mengusulkan dan mengevaluasi kerangka kerja Security 
+Orchestration, Automation, and Response (SOAR) menggunakan pendekatan low-code 
+untuk mengotomatisasi threat intelligence lifecycle. Melalui integrasi antara 
+Threat Intelligence Platform (Cyfirma), mesin orkestrasi (n8n), SIEM (Wazuh) 
+dengan algoritma Machine Learning untuk deteksi anomali, dan validasi 
+Human-in-the-Loop (HITL), penelitian ini bertujuan untuk mengukur dampak 
+operasional sistem terhadap pengurangan latensi respons, peningkatan akurasi 
+deteksi, dan kepuasan pengguna. 
+
+Hasil yang diharapkan adalah penurunan MTTR yang signifikan, peningkatan 
+akurasi deteksi melalui ML, dan mekanisme filterisasi yang lebih efektif 
+dibandingkan proses manual. Evaluasi solvabilitas dilakukan melalui User 
+Acceptance Testing (UAT) dengan survei terhadap minimal 10 responden pengguna 
+sistem.
+
+KATA KUNCI:
+- Security Orchestration Automation and Response (SOAR)
+- Cyber Threat Intelligence (CTI)
+- Mean Time to Respond (MTTR)
+- Machine Learning
+- Intrusion Detection System (IDS)
+- Indicators of Compromise (IOC)
+- Human-in-the-Loop
+- Incident Response
+- User Acceptance Testing (UAT)
+
+================================================================================
+BAB I - PENDAHULUAN
+================================================================================
+
+1.1 LATAR BELAKANG
+--------------------------------------------------------------------------------
+
+Lanskap ancaman siber (cyber threat landscape) kontemporer ditandai dengan 
+peningkatan eksponensial dalam volume, kecanggihan, dan kecepatan serangan. 
+Pusat Operasi Keamanan (Security Operations Center/SOC) di seluruh dunia kini 
+harus memproses ribuan peringatan keamanan (security alerts) setiap harinya, 
+dengan studi terdokumentasi melaporkan lebih dari 22.000 peringatan mingguan 
+pada lingkungan perusahaan berskala besar [1].
+
+Kecepatan deteksi dan remediasi ancaman menjadi determinan kritis bagi 
+ketahanan siber (cyber resilience) dalam organisasi. Hal ini dikarenakan 
+threat actor senantiasa mengeksploitasi kesenjangan temporal antara kompromi 
+awal dan respons defensif - sebuah periode yang dikenal sebagai Window of 
+Exposure.
+
+Cyber Threat Intelligence (CTI) berfungsi sebagai elemen fundamental dalam 
+pertahanan proaktif dengan menyediakan informasi yang dapat ditindaklanjuti 
+(actionable intelligence) mengenai taktik, teknik, prosedur (TTPs), serta 
+infrastruktur musuh.
+
+PAIN POINTS DALAM OPERASI SOC MANUAL:
+
+1. Lambatnya Ingesti Manual (Manual Ingestion Latency)
+   - Proses pemantauan dasbor TIP, ekstraksi IOC, dan verifikasi manual 
+     memakan waktu yang signifikan.
+   - Kesenjangan waktu antara publikasi ancaman dan tindakan defensif memberikan 
+     keuntungan taktis bagi penyerang.
+
+2. Tingginya Tingkat False Positive
+   - Tanpa mekanisme penyaringan otomatis yang cerdas, analis sering kali 
+     menerima data mentah yang belum diverifikasi.
+   - Membuang siklus kerja analis yang berharga untuk memvalidasi entitas yang 
+     tidak berbahaya.
+
+3. Beban Kognitif dan Human Error
+   - Sifat repetitif dari pemrosesan data CTI meningkatkan risiko kesalahan 
+     transkripsi manusia.
+   - Kelelahan analis akibat volume kerja yang tinggi menurunkan kualitas 
+     pengambilan keputusan.
+
+4. Inefisiensi Alokasi Sumber Daya
+   - Analis keamanan tingkat lanjut sering kali terperangkap dalam tugas-tugas 
+     administratif "Level 1", padahal keahlian mereka dibutuhkan untuk analisis 
+     "Level 3" (threat hunting dan analisis forensik).
+
+5. Keterbatasan Deteksi Berbasis Aturan
+   - Sistem IDS tradisional yang mengandalkan signature-based detection memiliki 
+     keterbatasan dalam mendeteksi ancaman zero-day dan serangan yang tidak 
+     sesuai dengan pola yang telah diketahui [2].
+
+KETERBATASAN PENELITIAN SEBELUMNYA:
+
+- Banyak penelitian sebelumnya berfokus pada desain arsitektur SOAR atau 
+  algoritma deteksi ancaman berbasis AI, namun kurang memberikan data empiris 
+  kuantitatif mengenai pengurangan latensi dan dampaknya terhadap MTTR dalam 
+  skenario dunia nyata.
+
+- Literatur yang ada sering kali membahas implementasi pada platform SOAR 
+  komersial yang tidak dapat diakses secara luas.
+
+- Studi tentang otomatisasi sering kali mengasumsikan akurasi data input, 
+  penelitian yang secara spesifik mengukur efektivitas mekanisme filter otomatis 
+  masih terbatas.
+
+- Kurangnya integrasi antara sistem orkestrasi dengan algoritma Machine Learning 
+  untuk deteksi anomali yang adaptif dalam konteks IOC ingestion.
+
+
+1.2 RUMUSAN MASALAH
+--------------------------------------------------------------------------------
+
+Berdasarkan identifikasi masalah dan kesenjangan riset, penelitian ini 
+merumuskan pertanyaan penelitian sebagai berikut:
+
+1. Bagaimana merancang arsitektur orkestrasi berbasis low-code yang mampu 
+   mengotomatisasi lifecycle threat intelligence (akuisisi, normalisasi, 
+   validasi) dari Cyfirma TIP secara andal dengan integrasi algoritma Machine 
+   Learning untuk deteksi anomali?
+
+2. Seberapa signifikan dampak penerapan sistem otomatisasi tersebut terhadap 
+   reduksi latensi pemrosesan data dan Mean Time to Respond (MTTR) jika 
+   dibandingkan dengan alur kerja manual konvensional?
+
+3. Bagaimana efektivitas mekanisme penyaringan otomatis berbasis Machine 
+   Learning (berbasis confidence score, deduplikasi, dan klasifikasi anomali) 
+   dalam menurunkan tingkat false positive dan meningkatkan akurasi deteksi 
+   yang mencapai analis?
+
+4. Apakah integrasi validasi Human-in-the-Loop (HITL) dalam alur kerja otomatis 
+   memberikan keseimbangan yang optimal antara kecepatan respons dan akurasi 
+   keputusan?
+
+5. Bagaimana tingkat kepuasan dan penerimaan pengguna (user solvability) 
+   terhadap sistem yang dikembangkan berdasarkan hasil User Acceptance Testing 
+   (UAT)?
+
+
+1.3 TUJUAN PENELITIAN
+--------------------------------------------------------------------------------
+
+Tujuan spesifik dari penelitian ini adalah:
+
+1. Membangun Artefak
+   - Mengembangkan prototipe sistem orkestrasi keamanan (SOAR) menggunakan 
+     platform low-code (n8n) yang terintegrasi dengan Cyfirma TIP (sumber data), 
+     Wazuh (SIEM), algoritma Machine Learning untuk deteksi anomali IOC, dan 
+     Telegram (antarmuka analis).
+
+2. Evaluasi Kuantitatif
+   - Mengukur secara empiris peningkatan efisiensi operasional melalui parameter 
+     waktu (time-based metrics: MTTR, MTTD, Processing Latency) dan kualitas 
+     data (Akurasi, Precision, Recall, F1-Score, False Positive Rate).
+
+3. Analisis Komparatif
+   - Membandingkan kinerja metode manual dibandingkan dengan otomatis untuk 
+     memvalidasi hipotesis bahwa otomatisasi low-code dengan ML dapat secara 
+     signifikan mengurangi Window of Exposure dan meningkatkan akurasi deteksi.
+
+4. Evaluasi Solvabilitas
+   - Melakukan User Acceptance Testing (UAT) dengan survei terhadap minimal 10 
+     responden untuk mengukur kepuasan, kemudahan penggunaan, dan efektivitas 
+     sistem dari perspektif pengguna.
+
+
+1.4 MANFAAT PENELITIAN
+--------------------------------------------------------------------------------
+
+A. MANFAAT TEORITIS:
+
+1. Memperkuat kerangka kerja kolaborasi manusia-mesin (Human-Machine Teaming) 
+   dalam respons insiden dengan memvalidasi model Human-in-the-Loop (HITL) 
+   di mana algoritma ML menangani korelasi data bervolume tinggi dan deteksi 
+   anomali, sementara manusia memegang kendali keputusan kritis [3].
+
+2. Mengisi kesenjangan teoretis mengenai efektivitas integrasi Machine Learning 
+   dengan arsitektur low-code dalam lingkungan yang kritis [4].
+
+3. Menambahkan kontribusi metriks dalam efisiensi SOC dengan membedah komponen 
+   latensi menjadi fase-fase mikro dan menambahkan metrik akurasi ML [5].
+
+4. Memberikan landasan teoretis untuk integrasi IOC ke IDS dengan algoritma ML, 
+   yang merupakan kontribusi signifikan dalam literatur threat intelligence dan 
+   intrusion detection [6].
+
+B. MANFAAT PRAKTIS:
+
+1. Reduksi Mean Time to Respond (MTTR)
+   - Dengan memindahkan beban kerja manual ke sistem otomatis yang diperkuat ML, 
+     organisasi dapat menutup window of exposure lebih cepat.
+   - Studi menunjukkan sistem AIR berbasis AI mampu mencapai latensi pemrosesan 
+     end-to-end hanya 58,3 ms [1].
+
+2. Peningkatan Akurasi Deteksi
+   - Integrasi algoritma ML seperti Random Forest, XGBoost, atau CNN untuk deteksi 
+     anomali IOC dapat meningkatkan akurasi deteksi hingga 99% sambil mengurangi 
+     false positive rate secara signifikan [2, 7].
+
+3. Mitigasi Alert Fatigue dan Peningkatan Akurasi Analis
+   - Sistem yang dirancang memberikan solusi konkret dengan menerapkan filter 
+     pra-pemrosesan otomatis berbasis ML yang membuang false positives.
+
+4. Efisiensi Biaya dan Demokratisasi Teknologi SOAR
+   - Penggunaan platform low-code memberikan alternatif biaya rendah (cost-effective) 
+     bagi organisasi menengah ke bawah (UMKM).
+
+5. Peningkatan Kelincahan Operasional (Operational Agility)
+   - Integrasi API yang modular memungkinkan tim keamanan untuk beradaptasi dengan 
+     ancaman baru dalam hitungan jam, bukan hari.
+
+
+1.5 RUANG LINGKUP MASALAH
+--------------------------------------------------------------------------------
+
+1. Sumber Data: Fokus pada Indicators of Compromise (IOC) jenis IP, Domain, dan 
+   Hash File dari Cyfirma TIP.
+
+2. Teknologi: Menggunakan Cyfirma (TIP), n8n (orkestrator), Wazuh (SIEM/Log 
+   management dengan integrasi ML), Telegram (Alerting), dan algoritma Machine 
+   Learning (Random Forest/XGBoost) untuk deteksi anomali.
+
+3. Metrik Efektivitas Tools:
+   - Processing Latency (Lp)
+   - MTTR (Mean Time to Respond)
+   - MTTD (Mean Time to Detect)
+   - Akurasi (Accuracy)
+   - Precision dan Recall
+   - F1-Score
+   - False Positive Rate (FPR)
+   - False Negative Rate (FNR)
+
+4. Metrik Solvabilitas: Evaluasi kepuasan pengguna melalui UAT dengan minimal 10 
+   responden menggunakan kuesioner berbasis skala Likert.
+
+5. Lingkungan: Eksperimen dilakukan dalam lingkungan laboratorium terkontrol 
+   (Virtual environment) yang mensimulasikan kondisi operasional.
+
+
+================================================================================
+BAB II - LANDASAN TEORI
+================================================================================
+
+2.1 PERAN CYBER THREAT INTELLIGENCE (CTI) DALAM SECURITY OPERATION CENTER (SOC)
+--------------------------------------------------------------------------------
+
+Cyber Threat Intelligence (CTI) telah berkembang menjadi kapabilitas fundamental 
+dalam operasi keamanan siber modern. Keberadaan CTI memungkinkan organisasi untuk 
+mentransformasi paradigma pertahanan mereka, beralih dari sekadar respons insiden 
+yang bersifat reaktif menuju aktivitas perburuan ancaman (threat hunting) dan 
+pertahanan proaktif.
+
+Dalam studinya, Abdulrazaq dan Kulugh menunjukkan bahwa integrasi CTI yang 
+dilakukan secara sistematis terbukti mampu mereduksi beban kognitif analis dan 
+mengakselerasi alur kerja penanganan insiden [8].
+
+Analisis komprehensif yang dilakukan oleh Sohal mengungkapkan bahwa investasi 
+pada otomatisasi berbasis SOAR berkorelasi signifikan dengan pengurangan Mean 
+Time to Response (MTTR) secara substansial [9].
+
+
+2.2 SECURITY ORCHESTRATION, AUTOMATION, AND RESPONSE (SOAR)
+--------------------------------------------------------------------------------
+
+Paradigma SOAR merepresentasikan pendekatan sistematis guna memitigasi kelelahan 
+analis (analyst fatigue) dan inefisiensi operasional melalui otomatisasi tugas-tugas 
+yang repetitif.
+
+Zhang et al. melaporkan bahwa arsitektur Automated Incident Response (AIR) berbasis 
+AI mampu mencapai skor F1 rata-rata sebesar 93% pada berbagai skenario serangan. 
+Studi ini mencatat pengurangan false negative sebesar 42% dalam deteksi kanal 
+Command and Control (C2), serta penurunan false positive sebesar 39% [1]. 
+Sistem ini mendemonstrasikan latensi pemrosesan end-to-end hanya sebesar 58,3 ms.
+
+Penelitian kontemporer menekankan pendekatan hyper automation menggunakan 
+kecerdasan buatan berbasis agen (agentic AI) untuk memungkinkan respons otomatis 
+yang adaptif dan dapat diaudit (auditable), sembari tetap mempertahankan mekanisme 
+pengawasan manusia [4].
+
+
+2.3 INTEGRASI IOC KE IDS DENGAN MACHINE LEARNING
+--------------------------------------------------------------------------------
+
+Indicators of Compromise (IOC) merupakan artefak teknis yang menunjukkan adanya 
+aktivitas berbahaya atau kompromi dalam sistem atau jaringan. IOC dapat berupa 
+alamat IP berbahaya, domain malicious, hash file malware, pola registry yang 
+dimodifikasi, dan jejak aktivitas lainnya yang terkait dengan serangan siber [11].
+
+Namun, pendekatan signature-based tradisional dalam IDS memiliki keterbatasan 
+signifikan dalam menghadapi ancaman zero-day dan serangan yang tidak sesuai dengan 
+pola yang telah diketahui. Untuk mengatasi keterbatasan ini, penelitian terkini 
+mengusulkan integrasi algoritma Machine Learning (ML) ke dalam IDS untuk deteksi 
+anomali yang lebih adaptif dan akurat [2, 6, 12].
+
+A. ALGORITMA MACHINE LEARNING UNTUK DETEKSI ANOMALI IOC:
+
+1. RANDOM FOREST (RF)
+   - Algoritma ensemble learning yang menggabungkan multiple decision trees.
+   - Telah terbukti mencapai akurasi hingga 99.89% dengan precision 99.30% dan 
+     recall 99.90% pada dataset SWaT [2].
+   - Keunggulan: kemampuan menangani fitur berdimensi tinggi dan memberikan 
+     estimasi pentingnya fitur.
+
+2. XGBOOST (EXTREME GRADIENT BOOSTING)
+   - Algoritma gradient boosting yang dioptimalkan untuk kecepatan dan performa.
+   - Telah menunjukkan akurasi 87% dengan false positive rate 0.07 dan false 
+     negative rate 0.12 pada dataset UNSW-NB15 [12].
+   - Keunggulan: menangani missing values dan memberikan regularisasi.
+
+3. CONVOLUTIONAL NEURAL NETWORKS (CNN)
+   - Arsitektur deep learning yang mampu menangkap pola spasial dalam data traffic 
+     jaringan.
+   - Telah mencapai akurasi hingga 99% untuk klasifikasi biner serangan [13].
+
+4. RECURRENT NEURAL NETWORKS (RNN) DAN LONG SHORT-TERM MEMORY (LSTM)
+   - Dirancang untuk memproses data sekuensial dan temporal.
+   - Sangat efektif untuk mendeteksi serangan multi-tahap (multi-stage attacks) 
+     dan Advanced Persistent Threats (APTs) [13].
+
+5. DEEP NEURAL NETWORKS (DNN)
+   - Arsitektur neural network dengan multiple hidden layers.
+   - Telah mencapai akurasi 99% untuk klasifikasi biner dan 98% untuk multi-class 
+     attack classification [13].
+
+B. METRIK EVALUASI UNTUK ML-BASED IDS:
+
+1. Accuracy = (TP + TN) / (TP + TN + FP + FN) x 100%
+   Persentase prediksi yang benar dari total prediksi.
+
+2. Precision = TP / (TP + FP) x 100%
+   Rasio prediksi positif yang benar terhadap total prediksi positif.
+
+3. Recall (Sensitivity) = TP / (TP + FN) x 100%
+   Rasio prediksi positif yang benar terhadap total kasus positif yang sebenarnya.
+
+4. F1-Score = 2 x (Precision x Recall) / (Precision + Recall)
+   Rata-rata harmonik dari Precision dan Recall.
+
+5. False Positive Rate (FPR) = FP / (FP + TN) x 100%
+   Rasio kasus negatif yang salah diklasifikasikan sebagai positif.
+
+6. False Negative Rate (FNR) = FN / (FN + TP) x 100%
+   Rasio kasus positif yang salah diklasifikasikan sebagai negatif.
+
+C. KEUNGGULAN ML-BASED IDS:
+
+1. Deteksi Zero-Day Attacks: ML dapat mendeteksi ancaman yang belum pernah 
+   terlihat sebelumnya dengan mengidentifikasi anomali.
+
+2. Adaptabilitas: Model ML dapat dilatih ulang dengan data baru untuk beradaptasi 
+   dengan ancaman yang terus berkembang.
+
+3. Reduksi False Positives: Dengan pembelajaran pola yang lebih baik, ML dapat 
+   mengurangi false positive rate secara signifikan.
+
+4. Pemrosesan Real-Time: Algoritma ML yang dioptimalkan dapat beroperasi dengan 
+   latensi rendah (rata-rata 45 ms) [6].
+
+5. Analisis Multidimensional: ML dapat menganalisis multiple features secara 
+   simultan untuk deteksi yang lebih akurat.
+
+
+2.4 DAMPAK OTOMATISASI PADA MEAN TIME TO RESPOND (MTTR)
+--------------------------------------------------------------------------------
+
+Korelasi antara otomatisasi dan kinerja respons insiden telah didokumentasikan 
+secara ekstensif dalam literatur terkini. Reduksi Mean Time to Respond (MTTR) 
+melalui pemrosesan intelijen ancaman otomatis merupakan keuntungan operasional 
+vital dalam pertahanan jaringan kontemporer.
+
+Sistem Automated Incident Response (AIR) yang dikembangkan oleh Zhang et al. 
+tidak hanya mencapai akurasi deteksi yang tinggi, tetapi juga membuktikan bahwa 
+alur kerja otomatis dapat memproses intelijen ancaman dengan latensi minimal - 
+sebesar 58,3 ms secara end-to-end [1].
+
+Dokumentasi mengenai pengurangan false positive sebesar 39% dan false negative 
+sebesar 42% mengindikasikan bahwa sistem otomatis yang direkayasa dengan baik 
+mampu mengungguli proses manual, baik dalam parameter kecepatan maupun akurasi [1].
+
+
+2.5 METRIK EFEKTIVITAS TOOLS DALAM CYBERSECURITY
+--------------------------------------------------------------------------------
+
+A. TIME-BASED METRICS:
+
+1. Mean Time to Detect (MTTD)
+   MTTD = Sum(T_detection - T_start) / N
+   Mengukur waktu rata-rata antara dimulainya aktivitas ancaman dan deteksi 
+   pertama oleh sistem keamanan.
+
+2. Mean Time to Acknowledge (MTTA)
+   MTTA = Sum(T_acknowledge - T_alert) / N
+   Mengukur waktu rata-rata antara alert dipicu dan analis mulai bekerja padanya.
+
+3. Mean Time to Respond (MTTR)
+   MTTR = Sum(T_response - T_detection) / N
+   Mengukur waktu rata-rata dari deteksi hingga respons awal terhadap ancaman.
+
+4. Mean Time to Contain (MTTC)
+   MTTC = Sum(T_contain - T_detection) / N
+   Mengukur waktu rata-rata untuk mengisolasi ancaman setelah deteksi.
+
+5. Mean Time to Resolve (MTTRs)
+   MTTRs = Sum(T_resolve - T_detection) / N
+   Mengukur waktu rata-rata untuk menyelesaikan insiden sepenuhnya.
+
+6. Processing Latency (Lp)
+   Lp = T_alert - T_avail
+   Waktu pemrosesan internal sistem dari ketersediaan data hingga alert terkirim.
+
+B. ACCURACY METRICS:
+
+1. Accuracy: Persentase prediksi yang benar dari total prediksi.
+2. Precision: Rasio prediksi positif yang benar terhadap total prediksi positif.
+3. Recall (True Positive Rate): Rasio prediksi positif yang benar terhadap total 
+   kasus positif yang sebenarnya.
+4. F1-Score: Rata-rata harmonik dari Precision dan Recall.
+5. False Positive Rate (FPR): Rasio kasus negatif yang salah diklasifikasikan 
+   sebagai positif.
+6. False Negative Rate (FNR): Rasio kasus positif yang salah diklasifikasikan 
+   sebagai negatif.
+
+C. OPERATIONAL METRICS:
+
+1. System Availability/Uptime: Persentase waktu sistem operasional.
+2. Incident Volume and Frequency: Jumlah insiden dalam periode waktu tertentu.
+3. Escalation Rate: Frekuensi insiden yang perlu dinaikkan tingkatnya.
+4. First-Touch Resolution Rate: Persentase insiden yang terselesaikan tanpa eskalasi.
+5. Cost Per Ticket: Biaya rata-rata untuk menangani satu insiden.
+
+
+2.6 ORKESTRASI BERBASIS API DAN PERINGATAN REAL-TIME
+--------------------------------------------------------------------------------
+
+Arsitektur intelijen ancaman modern semakin bergantung pada pola orkestrasi 
+berbasis API guna memfasilitasi pertukaran data secara real-time antar perangkat 
+keamanan yang heterogen. Adopsi format pertukaran standar, khususnya STIX 
+(Structured Threat Information eXpression) dan TAXII (Trusted Automated eXchange 
+of Intelligence Information), telah memfasilitasi ingesti data terpadu serta 
+rangkaian aksi otomatis yang secara signifikan mereduksi latensi pemrosesan [1, 18].
+
+Rekomendasi arsitektur menyarankan prioritas penggunaan format pertukaran standar, 
+penerapan panggilan API secara paralel (parallel execution), pemanfaatan caching 
+lokal untuk indikator berfrekuensi tinggi, serta perancangan playbook asinkron [1].
+
+
+2.7 VALIDASI HUMAN-IN-THE-LOOP (HITL)
+--------------------------------------------------------------------------------
+
+Meskipun otomatisasi menawarkan manfaat operasional yang substansial, literatur 
+secara konsisten menekankan peran krusial pengawasan manusia dalam menjaga 
+kepercayaan, auditabilitas, dan kualitas pengambilan keputusan dalam operasi 
+keamanan.
+
+Penelitian Mareedu mengenai SOC otonom mengindikasikan bahwa arsitektur hibrida, 
+yang memadukan triase otomatis dengan validasi manusia, mampu mencapai keseimbangan 
+operasional yang optimal sembari tetap menyediakan jejak audit dan penjelasan bagi 
+tinjauan analis [21].
+
+Pola desain yang mengemuka mencakup:
+- Perutean berdasarkan tingkat kepercayaan (confidence-based routing)
+- Validasi manusia yang eksplisit untuk tindakan remediasi yang berdampak tinggi
+- Penyediaan explainable outputs yang menyajikan alasan model atau indikator
+
+
+2.8 USER ACCEPTANCE TESTING (UAT) DAN EVALUASI SOLVABILITAS
+--------------------------------------------------------------------------------
+
+User Acceptance Testing (UAT) merupakan fase kritis dalam siklus pengembangan 
+sistem yang bertujuan untuk memvalidasi bahwa sistem memenuhi kebutuhan pengguna 
+dan dapat diterima untuk penggunaan operasional [22, 23].
+
+A. METODOLOGI UAT UNTUK CYBERSECURITY TOOLS:
+
+1. Persiapan UAT:
+   - Definisi kriteria penerimaan (acceptance criteria)
+   - Identifikasi partisipan (minimal 10 responden)
+   - Penyiapan lingkungan testing
+   - Pengembangan kuesioner evaluasi
+
+2. Pelaksanaan UAT:
+   - Sesi orientasi dan training singkat
+   - Simulasi skenario penggunaan nyata
+   - Pengumpulan data penggunaan sistem
+   - Pengisian kuesioner oleh responden
+
+3. Analisis Hasil:
+   - Analisis statistik data kuantitatif
+   - Analisis tematik data kualitatif
+   - Perhitungan metrik kepuasan
+   - Identifikasi area perbaikan
+
+B. KUESIONER EVALUASI:
+
+Kuesioner evaluasi menggunakan skala Likert 5-poin (1 = Sangat Tidak Setuju, 
+5 = Sangat Setuju) untuk mengukur dimensi-dimensi berikut:
+
+1. Kepuasan Pengguna (User Satisfaction):
+   - Tingkat kepuasan terhadap sistem secara keseluruhan
+   - Kesesuaian sistem dengan ekspektasi
+   - Rekomendasi sistem kepada pengguna lain
+
+2. Kemudahan Penggunaan (Usability):
+   - Kemudahan pembelajaran sistem
+   - Kemudahan navigasi antarmuka
+   - Kejelasan informasi yang ditampilkan
+   - Responsivitas sistem
+
+3. Efektivitas Fungsional (Functional Effectiveness):
+   - Kecepatan deteksi ancaman
+   - Akurasi alert yang dihasilkan
+   - Relevansi informasi yang disajikan
+   - Kemudahan dalam validasi alert
+
+4. Keandalan Sistem (System Reliability):
+   - Stabilitas sistem dalam operasi
+   - Ketersediaan sistem saat dibutuhkan
+   - Keandalan mekanisme notifikasi
+
+5. Dampak Operasional (Operational Impact):
+   - Pengurangan beban kerja manual
+   - Peningkatan efisiensi respons
+   - Pengurangan alert fatigue
+
+C. METRIK SOLVABILITAS:
+
+1. Rata-rata Kepuasan:
+   Satisfaction_avg = Sum(Score_i) / n
+
+2. Persentase Kepuasan:
+   Satisfaction_% = (Satisfaction_avg / Max Score) x 100%
+
+3. Tingkat Penerimaan:
+   Acceptance Rate = (Number of Accepting Respondents / Total Respondents) x 100%
+
+4. Net Promoter Score (NPS): Mengukur kemungkinan pengguna merekomendasikan sistem.
+
+D. PROSEDUR PENGAMBILAN DATA UAT:
+
+1. Populasi dan Sampel:
+   - Populasi target: Analis keamanan, SOC analysts, atau praktisi keamanan siber
+   - Ukuran sampel: Minimal 10 responden (sesuai dengan praktik terbaik untuk UAT awal)
+   - Metode sampling: Purposive sampling dengan kriteria partisipan yang memiliki 
+     pengalaman dalam operasi SOC
+
+2. Instrumen Pengumpulan Data:
+   - Kuesioner online menggunakan platform survei (Google Forms/Typeform)
+   - Log penggunaan sistem untuk data objektif
+   - Wawancara singkat (opsional) untuk data kualitatif
+
+3. Prosedur Pelaksanaan:
+   - Sesi UAT dilakukan setelah fase eksperimen sistem selesai
+   - Setiap responden diberikan akses ke sistem selama periode tertentu (minimal 3 hari)
+   - Responden diminta untuk menyelesaikan tugas-tugas yang telah ditentukan
+   - Setelah periode penggunaan, responden mengisi kuesioner evaluasi
+
+4. Analisis Data:
+   - Data kuantitatif dianalisis menggunakan statistik deskriptif (mean, median, 
+     standard deviation)
+   - Data kualitatif dianalisis menggunakan content analysis
+   - Hasil disajikan dalam bentuk laporan evaluasi komprehensif
+
+
+================================================================================
+BAB III - METODOLOGI
+================================================================================
+
+3.1 KERANGKA BERPIKIR
+--------------------------------------------------------------------------------
+
+Penelitian ini menggunakan pendekatan Mixed Methods (Kuantitatif Eksperimental 
+dan Kualitatif) untuk mengukur hubungan sebab-akibat antara penerapan variabel 
+independen (sistem orkestrasi otomatis n8n dengan integrasi ML) dan variabel 
+dependen (efisiensi respons insiden dan kepuasan pengguna).
+
+Metodologi ini mengikuti kerangka Constructive Research Approach, yang melibatkan 
+pembangunan artefak teknologi (otomatisasi dengan ML) dan evaluasi kinerjanya 
+terhadap baseline (proses manual) dalam lingkungan terkontrol.
+
+
+3.2 ARSITEKTUR SISTEM DAN LINGKUNGAN EKSPERIMEN
+--------------------------------------------------------------------------------
+
+Eksperimen dilakukan dalam lingkungan laboratorium yang mensimulasikan 
+infrastruktur SOC perusahaan menengah. Penggunaan teknologi Virtual Machine 
+memastikan reprodusibilitas eksperimen.
+
+A. KOMPONEN SISTEM:
+
+1. Sumber Threat Intelligence: Cyfirma TIP
+   - Menyediakan feed data IOC (IP, Domain, Hash) melalui REST API yang aman
+   - Data ini dianggap sebagai ground truth untuk eksperimen
+
+2. Mesin Orkestrasi (Orchestrator): n8n (Self-Hosted)
+   - Dijalankan dalam kontainer Docker
+   - Berfungsi sebagai hub pusat yang mengelola logika alur kerja, penjadwalan, 
+     dan integrasi API
+
+3. Sistem Deteksi & Log (SIEM): Wazuh Manager
+   - Dijalankan pada host Windows 11
+   - Berfungsi untuk menyimpan log incident dan menyediakan kemampuan korelasi data
+
+4. ML Engine: Modul Machine Learning untuk deteksi anomali IOC
+   - Mengimplementasikan algoritma Random Forest dan XGBoost untuk klasifikasi IOC
+   - Berdasarkan fitur-fitur seperti confidence score, reputation, historical data
+
+5. Target Endpoint: Virtual Machine Linux Ubuntu 22.04LTS
+   - Dilengkapi dengan Wazuh Agent untuk mensimulasikan sistem yang dipantau
+
+6. Antarmuka Analis (Alerting): Telegram Bot API
+   - Dipilih karena kecepatan pengiriman pesan (push notification)
+   - Dukungan format HTML dan kemampuan interaktif (tombol callback) untuk validasi HITL
+
+B. ALUR KERJA SISTEM DENGAN INTEGRASI ML:
+
+Fase 1: Ingesti dan Preprocessing
+- Data ditarik (poll) dari Cyfirma oleh n8n setiap 5 menit menggunakan API
+- Data IOC dinormalisasi ke format standar (STIX 2.1)
+- Ekstraksi fitur untuk analisis ML (confidence score, threat level, reputation score)
+
+Fase 2: Deteksi Anomali dengan ML
+- IOC diproses oleh ML Engine menggunakan model Random Forest/XGBoost
+- Model melakukan klasifikasi: Malicious, Suspicious, atau Benign
+- Perhitungan confidence score untuk setiap prediksi
+- IOC dengan confidence < 70% atau hasil klasifikasi ambiguous ditandai untuk review manusia
+
+Fase 3: Validasi dan Enrichment
+- IOC yang lolos filter ML (confidence > 70% dan klasifikasi Malicious/Suspicious) 
+  di-enrich dengan konteks tambahan
+- Deduplikasi berdasarkan hash atau atribut unik
+- Cross-reference dengan allow-list dan block-list internal
+
+Fase 4: Human-in-the-Loop (HITL)
+- Alert yang telah di-enrich dikirim ke analis melalui Telegram
+- Analis melakukan validasi dengan tombol Approve/Reject
+- Feedback dari analis digunakan untuk retraining model ML (continuous learning)
+
+Fase 5: Respons Otomatis
+- Apabila analis approve, respons tersebut dikirim kembali ke n8n
+- n8n mengeksekusi tindakan ke Wazuh EDR agent untuk memblokir IP, URL/Domain, atau Hash
+- Logging dan dokumentasi insiden secara otomatis
+
+
+3.3 VARIABEL DAN METRIK EVALUASI
+--------------------------------------------------------------------------------
+
+A. VARIABEL INDEPENDEN:
+
+Metode Alur Kerja: Dibedakan menjadi dua kondisi:
+- Manual (Control Group): Proses ekstraksi, validasi, dan distribusi IOC 
+  dilakukan secara manual oleh analis
+- Otomatis dengan ML (Experimental Group): Proses diotomatisasi dengan n8n 
+  dan diperkuat dengan deteksi ML
+
+B. VARIABEL DEPENDEN (METRIK KINERJA):
+
+B1. METRIK EFEKTIVITAS TOOLS (KUANTITATIF):
+
+1. Waktu Pemrosesan (Processing Latency = Lp)
+   Lp = T_alert - T_avail
+   Selisih waktu antara ketersediaan data di sumber dan penerimaan peringatan 
+   oleh analis.
+
+2. Mean Time to Detect (MTTD)
+   MTTD = Sum(T_detection - T_start) / N
+   Waktu rata-rata dari dimulainya aktivitas ancaman hingga deteksi oleh sistem.
+
+3. Mean Time to Respond (MTTR)
+   MTTR = Sum(T_decision - T_avail) / N
+   Waktu total dari ketersediaan data hingga keputusan validasi diambil oleh analis.
+
+4. Mean Time to Contain (MTTC)
+   MTTC = Sum(T_contain - T_detection) / N
+   Waktu rata-rata untuk mengisolasi ancaman setelah deteksi.
+
+5. Akurasi (Accuracy)
+   Accuracy = (TP + TN) / (TP + TN + FP + FN) x 100%
+   Persentase prediksi ML yang benar dari total prediksi.
+
+6. Precision
+   Precision = TP / (TP + FP) x 100%
+   Rasio prediksi positif yang benar terhadap total prediksi positif.
+
+7. Recall (Sensitivity)
+   Recall = TP / (TP + FN) x 100%
+   Rasio prediksi positif yang benar terhadap total kasus positif yang sebenarnya.
+
+8. F1-Score
+   F1-Score = 2 x (Precision x Recall) / (Precision + Recall)
+   Rata-rata harmonik dari Precision dan Recall.
+
+9. False Positive Rate (FPR)
+   FPR = FP / (FP + TN) x 100%
+   Persentase peringatan yang dikirim ke analis namun kemudian ditolak.
+
+10. False Negative Rate (FNR)
+    FNR = FN / (FN + TP) x 100%
+    Persentase ancaman yang tidak terdeteksi oleh sistem.
+
+11. Throughput Sistem
+    Jumlah IOC yang dapat diproses per satuan waktu (IOC/detik).
+
+B2. METRIK SOLVABILITAS (KUALITATIF - UAT):
+
+1. User Satisfaction Score (USS)
+   USS = Sum(Score_i) / n
+   Rata-rata skor kepuasan pengguna dari kuesioner UAT (skala 1-5).
+
+2. System Usability Score (SUS)
+   Skor standar usability berdasarkan 10 pertanyaan SUS.
+
+3. Net Promoter Score (NPS)
+   NPS = % Promoters - % Detractors
+   Mengukur kemungkinan pengguna merekomendasikan sistem.
+
+4. Task Success Rate
+   Persentase tugas yang berhasil diselesaikan oleh pengguna tanpa bantuan.
+
+5. Time on Task
+   Waktu rata-rata yang dibutuhkan pengguna untuk menyelesaikan tugas tertentu.
+
+
+3.4 PROSES PENGUMPULAN DATA
+--------------------------------------------------------------------------------
+
+Data dikumpulkan melalui simulasi operasional selama 14 hari kerja dengan 
+tahapan sebagai berikut:
+
+FASE 1: BASELINE (MANUAL) - HARI 1-7
+- Tim analis melakukan pemantauan manual terhadap dasbor Cyfirma
+- Setiap kali IOC baru dengan tingkat keparahan "High" muncul, analis mencatat 
+  waktu deteksi, melakukan verifikasi manual, dan mengirimkan notifikasi
+- Semua stempel waktu (timestamp) dicatat secara manual
+- Metrik yang diukur: MTTD, MTTR, MTTC, FPR (manual), Throughput manual
+
+FASE 2: EKSPERIMEN (OTOMATIS DENGAN ML) - HARI 8-14
+- Sistem n8n dengan integrasi ML diaktifkan
+- Sistem log n8n, ML Engine, dan Telegram secara otomatis mencatat timestamp 
+  presisi (milidetik) untuk setiap tahap:
+  * Fetch Start
+  * ML Preprocessing
+  * ML Prediction
+  * Filter Decision
+  * Telegram Send
+  * User Button Click
+- Metrik yang diukur: Lp, MTTD, MTTR, MTTC, Accuracy, Precision, Recall, 
+  F1-Score, FPR, FNR, Throughput sistem
+
+FASE 3: SKENARIO PENGUJIAN STRES
+- Skenario "High Volume Surge" dijalankan dengan menyuntikkan 500 IOC tiruan 
+  (dummy data) sekaligus ke dalam alur kerja
+- Pengukuran throughput dan stabilitas sistem antrian n8n
+- Evaluasi performa ML pada volume data tinggi
+
+FASE 4: USER ACCEPTANCE TESTING (UAT) - SETELAH FASE EKSPERIMEN
+
+A. PERSIAPAN UAT:
+
+Identifikasi Responden:
+- Minimal 10 responden yang memenuhi kriteria:
+  * Memiliki pengalaman dalam operasi SOC atau analisis keamanan siber
+  * Familiar dengan tools keamanan (SIEM, TIP, dll.)
+  * Bersedia untuk berpartisipasi selama minimal 3 hari
+
+Instrumen:
+- Kuesioner evaluasi menggunakan skala Likert 5-poin
+- Daftar tugas (task list) untuk simulasi penggunaan
+- Form feedback terbuka untuk saran dan masukan
+
+B. PELAKSANAAN UAT (3-5 HARI):
+
+Hari 1: Sesi orientasi dan training singkat (30-60 menit)
+- Penjelasan fitur dan fungsi sistem
+- Demonstrasi penggunaan
+- Kesempatan untuk bertanya
+
+Hari 2-3: Simulasi penggunaan nyata
+- Setiap responden diberikan akses ke sistem
+- Responden menyelesaikan daftar tugas yang telah ditentukan:
+  * Melakukan validasi alert melalui Telegram
+  * Mengecek status blokiran IOC di Wazuh
+  * Melihat log dan riwayat insiden
+- Sistem mencatat log penggunaan (time on task, task success rate)
+
+Hari 4: Pengisian kuesioner
+- Responden mengisi kuesioner evaluasi secara online
+- Waktu pengisian: 15-20 menit
+- Kuesioner mencakup dimensi: kepuasan, usability, efektivitas, keandalan, 
+  dampak operasional
+
+C. ANALISIS DATA UAT:
+
+Analisis Kuantitatif:
+- Perhitungan rata-rata skor untuk setiap dimensi
+- Perhitungan SUS Score
+- Perhitungan NPS
+- Analisis statistik deskriptif (mean, median, standard deviation)
+
+Analisis Kualitatif:
+- Content analysis terhadap feedback terbuka
+- Identifikasi tema umum (common themes)
+- Identifikasi area perbaikan
+
+D. PELAPORAN HASIL UAT:
+
+Laporan evaluasi UAT yang mencakup:
+- Profil demografi responden
+- Hasil analisis kuantitatif (grafik, tabel)
+- Hasil analisis kualitatif (kutipan, tema)
+- Rekomendasi perbaikan
+- Kesimpulan kelayakan sistem
+
+
+3.5 ALGORITMA MACHINE LEARNING UNTUK DETEKSI IOC
+--------------------------------------------------------------------------------
+
+A. PREPROCESSING DATA:
+
+1. Feature Extraction:
+   Ekstraksi fitur dari IOC meliputi:
+   - Fitur Statis: Confidence score dari TIP, reputation score, age of IOC, 
+     first seen, last seen
+   - Fitur Kontekstual: Jumlah referensi, sumber intelijen, kategori ancaman, 
+     TTPs terkait
+   - Fitur Historis: Frekuensi kemunculan, pola penggunaan di jaringan, hasil 
+     deteksi sebelumnya
+
+2. Encoding:
+   - Categorical encoding untuk fitur non-numerik (One-Hot Encoding atau 
+     Label Encoding)
+   - Normalisasi fitur numerik ke rentang [0,1]
+
+3. Feature Selection:
+   - Menggunakan Information Gain atau PCA untuk seleksi fitur penting
+   - Mengurangi dimensi data untuk meningkatkan efisiensi training
+
+B. MODEL TRAINING:
+
+1. Random Forest Classifier:
+   Parameter:
+   - n_estimators: 100-200 trees
+   - max_depth: 10-20
+   - min_samples_split: 5-10
+   - min_samples_leaf: 2-5
+
+   Training Process:
+   - Split data: 70% training, 20% validation, 10% testing
+   - Cross-validation: 5-fold
+   - Hyperparameter tuning menggunakan Grid Search atau Random Search
+
+2. XGBoost Classifier:
+   Parameter:
+   - n_estimators: 100-200
+   - max_depth: 3-10
+   - learning_rate: 0.01-0.3
+   - subsample: 0.8-1.0
+   - colsample_bytree: 0.8-1.0
+
+   Training Process:
+   - Early stopping berdasarkan validation loss
+   - Regularization (L1/L2) untuk mencegah overfitting
+
+C. MODEL EVALUATION:
+
+1. Confusion Matrix:
+   
+   |                | Predicted Positive | Predicted Negative |
+   |----------------|-------------------|-------------------|
+   | Actual Positive| TP                | FN                |
+   | Actual Negative| FP                | TN                |
+
+2. Performance Metrics:
+   - Accuracy, Precision, Recall, F1-Score
+   - ROC-AUC untuk evaluasi threshold
+   - Precision-Recall Curve untuk imbalanced dataset
+
+3. Continuous Learning:
+   - Feedback dari analis (HITL) digunakan untuk retraining model
+   - Periodic retraining dengan data baru
+   - Monitoring drift dalam performa model
+
+
+================================================================================
+BAB IV - HASIL YANG DIHARAPKAN
+================================================================================
+
+Berdasarkan literatur dan desain sistem yang diusulkan, hasil yang diharapkan 
+dari penelitian ini meliputi:
+
+4.1 PENINGKATAN EFISIENSI WAKTU
+--------------------------------------------------------------------------------
+
+Reduksi MTTR:
+- Penurunan MTTR dari rata-rata industri (berjam-jam) menjadi kurang dari 15 menit
+- Latensi pemrosesan end-to-end diharapkan < 100 ms (mendekati hasil Zhang et al. 
+  yang mencapai 58,3 ms [1])
+
+Peningkatan Throughput:
+- Sistem mampu memproses > 1000 IOC per menit
+- Perbandingan throughput otomatis vs manual menunjukkan peningkatan 10-50x
+
+
+4.2 PENINGKATAN AKURASI DETEKSI
+--------------------------------------------------------------------------------
+
+Performa ML Model:
+- Accuracy: > 95% (mendekati hasil Random Forest 99.89% [2])
+- Precision: > 90% (mengurangi false positive)
+- Recall: > 95% (meminimalkan missed detection)
+- F1-Score: > 92%
+
+Reduksi False Positives:
+- Penurunan FPR sebesar 30-50% dibandingkan metode manual
+- Penurangan alert fatigue pada analis
+
+
+4.3 KEPUASAN PENGGUNA (SOLVABILITAS)
+--------------------------------------------------------------------------------
+
+Hasil UAT:
+- User Satisfaction Score: > 4.0 dari 5.0 (80% kepuasan)
+- System Usability Score (SUS): > 68 (di atas rata-rata)
+- Net Promoter Score (NPS): > 50 (excellent)
+- Task Success Rate: > 90%
+
+Feedback Pengguna:
+- Pengguna merasa sistem mudah dipelajari dan digunakan
+- Pengguna melihat peningkatan efisiensi dalam pekerjaan harian
+- Pengguna merekomendasikan sistem untuk digunakan secara luas
+
+
+4.4 KONTRIBUSI AKADEMIK
+--------------------------------------------------------------------------------
+
+Publikasi:
+- Paper yang menggabungkan konsep SOAR, ML, dan HITL dalam satu kerangka kerja
+- Dataset dan kode yang dapat direplikasi untuk penelitian lanjutan
+- Metodologi UAT untuk cybersecurity tools
+
+Inovasi:
+- Integrasi ML-based anomaly detection ke dalam pipeline SOAR low-code
+- Framework evaluasi komprehensif yang menggabungkan metrik teknis dan 
+  user satisfaction
+
+
+================================================================================
+DAFTAR PUSTAKA
+================================================================================
+
+[1] J. Zhang, S. Li, W. Huang, H. Jing, and Q. Zhang, "Design and Computational 
+    Modeling of an AI-Based Automated Cybersecurity Incident Response System," 
+    IEEE Access, 2025. DOI: 10.1109/access.2025.3603975
+
+[2] M. A. Rahman et al., "Impact of Machine Learning on Intrusion Detection 
+    Systems for the Protection of Critical Infrastructure," Information, vol. 16, 
+    no. 7, 2025. DOI: 10.3390/info16070515
+
+[3] A. Tilbury and S. Flowerday, "Humans and Automation: Augmenting Security 
+    Operation Centers," Journal of Cybersecurity and Privacy, vol. 4, pp. 388-409, 
+    2024.
+
+[4] R. Ismail, R. Kurnia, Z. A. Brata, G. A. Nelistiani, and S. Heo, "Toward 
+    Robust Security Orchestration and Automated Response in Security Operations 
+    Centers with a Hyper-Automation Approach Using Agentic Artificial Intelligence," 
+    Information, vol. 16, no. 5, 2025. DOI: 10.3390/info16050365
+
+[5] S. Sohal, "Correlating SOC Maturity Levels with Incident Response Outcomes: 
+    An Empirical Study," International Journal of Applied Mathematics, vol. 38, 
+    no. 10S, 2024. DOI: 10.12732/ijam.v38i10s.1056
+
+[6] A. H. Aldhaheri et al., "DeepDCA: A Deep Learning Approach with Dendritic 
+    Cell Algorithm for IoT Attack Detection," in IEEE Access, vol. 8, 
+    pp. 221046-221062, 2020. DOI: 10.1109/ACCESS.2020.3043468
+
+[7] M. A. Ferrag et al., "A comprehensive survey on intrusion detection systems 
+    with advances in machine learning, deep learning and emerging cybersecurity 
+    challenges," Springer Nature, 2025. DOI: 10.1007/s44163-025-00578-1
+
+[8] U. F. Abdulrazaq, V. E. Kulugh, S. E. Eluwah, and I. A. Mohammed, 
+    "Operational Integration of Cyber Threat Intelligence in Modern Security 
+    Operations Centers: A Design Science Approach," IJCISR, vol. 4, no. 1, 
+    pp. 84-94, Jun. 2024.
+
+[9] S. Sohal, "Correlating SOC Maturity Levels with Incident Response Outcomes: 
+    An Empirical Study," 2024. DOI: 10.12732/ijam.v38i10s.1056
+
+[10] H. Pigg, "Threat Intelligence Automation and Optimization Through SOAR 
+     Integration," 2024.
+
+[11] SearchInform, "Understanding Indicators of Compromise in Cybersecurity," 
+     2026. [Online]. Available: https://searchinform.com/articles/cybersecurity/
+     analytics/digital-forensics/indicators-of-compromise/
+
+[12] A. M. A. Musa et al., "Evaluating machine learning-based intrusion detection 
+     systems with explainable AI: enhancing transparency and interpretability," 
+     Frontiers in Computer Science, vol. 7, 2025. DOI: 10.3389/fcomp.2025.1520741
+
+[13] M. Masum and S. Shahriar, "Deep Learning Algorithms Used in Intrusion 
+     Detection Systems," arXiv preprint arXiv:2402.17020, 2024.
+
+[14] Comparative Study of Intrusion Detection Systems, ScienceXcel Journal, 2025. 
+     [Online]. Available: https://www.sciencexcel.com/articles/ZioJQaT9r7XBWVt5a7HGqFXarZ7WVcCLRrVvmNS1.pdf
+
+[15] Rootly, "Complete Guide to MTTD, MTTR, MTTC & More," 2026. [Online]. 
+     Available: https://rootly.com/incident-response/metrics
+
+[16] Atlassian, "MTBF, MTTR, MTTA, and MTTF," 2025. [Online]. Available: 
+     https://www.atlassian.com/incident-management/kpis/common-metrics
+
+[17] SentinelOne, "What is MTTR (Mean Time to Remediate) in Cybersecurity?" 2025. 
+     [Online]. Available: https://www.sentinelone.com/cybersecurity-101/
+     cybersecurity/mttr-mean-time-to-remediate/
+
+[18] K. Provatas, I. Tzannetos, and V. Vescoukis, "Standards-based Cyber Threat 
+     Intelligence sharing using STIX/TAXII over a Hyperledger Fabric network," 
+     in Proceedings of the 18th International Conference on Security and 
+     Cryptography (SECRYPT 2023), 2023.
+
+[19] V. G. Bilali, D. Kosyvas, and T. Theodoropoulos, "Iris Advanced Threat 
+     Intelligence Orchestrator - A Way to Manage Cybersecurity Challenges of 
+     IoT Ecosystems in Smart Cities," 2024.
+
+[20] M. Mennuni, "An Analysis of SOC Monitoring Systems," International Journal 
+     of Scientific Research and Analysis, vol. 14, no. 2, 2025. 
+     DOI: 10.30574/ijsra.2025.14.2.0542
+
+[21] A. Mareedu, "Autonomous Security Operations Centers (SOC): AI Agents for 
+     Threat Triage, Response, and Orchestration," International Journal of 
+     Engineering Research and Technology, vol. 6, no. 2, 2025. 
+     DOI: 10.63282/3050-922x.ijeret.v6i2p108
+
+[22] CloudQA, "UAT Testing Blueprint: Building a Successful User Acceptance 
+     Framework," 2025. [Online]. Available: https://cloudqa.io/uat-testing-
+     blueprint-building-a-successful-user-acceptance-framework/
+
+[23] M. N. Islam et al., "Cyber Hygiene Methodology for Raising Cybersecurity 
+     and Data Privacy Awareness in Health Care Organizations: Concept Study," 
+     JMIR, 2023. DOI: 10.2196/41294
+
+[24] Rapid7, "What is Human-in-the-Loop (HITL) in Cybersecurity?" 2026. [Online]. 
+     Available: https://www.rapid7.com/fundamentals/human-in-the-loop/
+
+[25] A. S. Al-Hawawreh and N. A. B. A. Latip, "A Convolutional Neural Network 
+     for Improved Anomaly-Based Network Intrusion Detection," Big Data, vol. 9, 
+     no. 2, 2021. DOI: 10.1089/big.2021.0055
+
+[26] M. Al-Hawawreh, "Cybersecurity on a budget: Evaluating security and 
+     performance of open-source SIEM solutions for SMEs," PMC, 2024. [Online]. 
+     Available: https://pmc.ncbi.nlm.nih.gov/articles/PMC10977669/
+
+[27] DAAAM, "Comparative analysis of IBM QRadar and Wazuh for security information 
+     and event management," Proceedings of the 34th DAAAM International Symposium, 
+     2023.
+
+[28] M. A. Rahman et al., "Improving Threat Detection in Wazuh Using Machine 
+     Learning Techniques," Cybersecurity and Privacy, vol. 5, no. 2, 2025. 
+     DOI: 10.3390/cyber5020034
+
+[29] Y. Kim et al., "Sharing cyber threat intelligence: Does it really help?" 
+     in Proceedings of the 2024 Network and Distributed System Security Symposium 
+     (NDSS), 2024.
+
+[30] IJARCCE, "Log-Based Threat Detection for a Resilient Digital World," 
+     International Journal of Advanced Research in Computer and Communication 
+     Engineering, vol. 14, no. 1, 2025. DOI: 10.17148/IJARCCE.2025.14162
+
+[31] B. Wibowo, A. Nurrohman, and L. Hafiz, "Deep Learning in Wazuh Intrusion 
+     Detection System to Identify Advanced Persistent Threat (APT) Attacks," 
+     International Journal of Science Education and Cultural Studies, vol. 4, 
+     no. 1, 2025. DOI: 10.58291/ijsecs.v4i1.311
+
+[32] R. Ismail et al., "Toward Robust Security Orchestration and Automated 
+     Response in Security Operations Centers with a Hyper-Automation Approach 
+     Using Agentic Artificial Intelligence," Information, vol. 16, no. 5, 2025. 
+     DOI: 10.3390/info16050365
+
+[33] S. M. I. Mahadi et al., "From Reactive to Proactive: Engineering a 
+     Next-Generation Cyber Threat Response Emergency Operations Center (EOC) 
+     for Financial Institutions," American Journal of Geospatial Technology, 
+     vol. 4, no. 1, 2025. DOI: 10.54536/ajgt.v4i1.5355
+
+[34] Rapid7, "Mean Time to Detect (MTTD)," 2026. [Online]. Available: 
+     https://www.rapid7.com/fundamentals/mean-time-to-detect-mttd/
+
+[35] Arctic Wolf, "MTTD and MTTR," 2025. [Online]. Available: 
+     https://arcticwolf.com/resources/glossary/mttd-mttr/
+
+[36] Palo Alto Networks, "Mastering MTTR: A Strategic Imperative for Leadership," 
+     Cyberpedia. [Online]. Available: https://www.paloaltonetworks.com/cyberpedia/
+     mean-time-to-repair-mttr
+
+[37] Huntress, "Mean Time to Respond (MTTR): Cybersecurity Guide," 2025. [Online]. 
+     Available: https://www.huntress.com/cybersecurity-101/topic/mean-time-to-respond
+
+[38] MITRE, "Cyber Resiliency Metrics, Measures of Effectiveness, and Scoring," 
+     2021. [Online]. Available: https://www.mitre.org/sites/default/files/2021-11/
+     prs-18-2579-cyber-resiliency-metrics-measures-of-effectiveness-and-scoring.pdf
+
+[39] S. K. T. A. Talukder et al., "A hybrid machine learning model for intrusion 
+     detection in wireless sensor networks leveraging data balancing and 
+     dimensionality reduction," PMC, 2025. [Online]. Available: 
+     https://pmc.ncbi.nlm.nih.gov/articles/PMC11806096/
+
+[40] A. Kamarudin et al., "A hybrid approach to reducing the false positive rate 
+     in unsupervised machine learning intrusion detection," IEEE Access, 2026. 
+     DOI: 10.1109/ACCESS.2026.7506773
+
+================================================================================
+END OF DOCUMENT
+================================================================================

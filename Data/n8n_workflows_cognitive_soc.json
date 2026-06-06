@@ -1,0 +1,175 @@
+{
+  "name": "Cognitive SOC Threat Intelligence Pipeline",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": "interval",
+        "value": 5
+      },
+      "name": "Schedule Ingestion",
+      "type": "n8n-nodes-base.cron",
+      "typeVersion": 1,
+      "position": [100, 300]
+    },
+    {
+      "parameters": {
+        "url": "https://api.cyfirma.com/v1/ioc",
+        "authentication": "headerAuth",
+        "options": {}
+      },
+      "name": "Cyfirma TIP Ingestion",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [300, 300]
+    },
+    {
+      "parameters": {
+        "language": "javascript",
+        "jsCode": "const iocs = items[0].json.data;\nconst normalized = iocs.map(ioc => ({\n  id: ioc.id,\n  timestamp: Math.floor(Date.now() / 1000),\n  ioc_value: ioc.value,\n  ioc_type: ioc.type,\n  tip_reputation_score: ioc.score / 100,\n  geolocation_risk: ioc.geo === 'High' ? 2 : (ioc.geo === 'Medium' ? 1 : 0),\n  asn_reputation: ioc.asn_score,\n  feed_frequency: Math.log(ioc.frequency + 1),\n  threat_category: ioc.category\n}));\nreturn normalized.map(item => ({ json: item }));"
+      },
+      "name": "ETL Normalization & Dedup",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "command": "python c:\\Users\\ACER\\Downloads\\Skripsi\\predict_threat.py \"{{$json.ioc_value}}\" \"{{$json.tip_reputation_score}}\" \"{{$json.geolocation_risk}}\""
+      },
+      "name": "ML Predict (Random Forest)",
+      "type": "n8n-nodes-base.executeCommandLine",
+      "typeVersion": 1,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{$json.confidence}}",
+              "value2": 0.85
+            }
+          ]
+        }
+      },
+      "name": "Confidence Routing (D)",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://wazuh-manager.local:55000/rules",
+        "method": "POST",
+        "bodyParametersUi": [
+          {
+            "name": "rule_xml",
+            "value": "=<rule id=\"100099\" level=\"7\"><field name=\"srcip\">{{$json.ioc_value}}</field><description>Cognitive SOC Blocked Malicious IP</description></rule>"
+          }
+        ]
+      },
+      "name": "Autonomous Block (Wazuh)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1150, 180]
+    },
+    {
+      "parameters": {
+        "chatId": "-1002132435",
+        "text": "=⚠️ *HOTL Escalation Required*\n\nIOC: `{{$json.ioc_value}}`\nType: {{$json.ioc_type}}\nPrediction: *{{$json.prediction}}*\nConfidence: `{{$json.confidence}}`\n\n[Approve Block](https://t.me/CognitiveSOCBot?start=approve_{{$json.id}}) | [Classify False Positive](https://t.me/CognitiveSOCBot?start=fp_{{$json.id}})",
+        "additionalFields": {
+          "parse_mode": "Markdown"
+        }
+      },
+      "name": "Telegram HOTL Escalation",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [1150, 420]
+    },
+    {
+      "parameters": {
+        "chatId": "-1002132435",
+        "text": "=✅ *Autonomous Block Executed*\n\nIOC: `{{$json.ioc_value}}`\nRule Deployed: XML ID {{$json.rule_id}}\nMTTR: `{{$json.mttr}}` seconds."
+      },
+      "name": "Telegram Log Notify",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1,
+      "position": [1400, 180]
+    }
+  ],
+  "connections": {
+    "Schedule Ingestion": {
+      "main": [
+        [
+          {
+            "node": "Cyfirma TIP Ingestion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cyfirma TIP Ingestion": {
+      "main": [
+        [
+          {
+            "node": "ETL Normalization & Dedup",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ETL Normalization & Dedup": {
+      "main": [
+        [
+          {
+            "node": "ML Predict (Random Forest)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ML Predict (Random Forest)": {
+      "main": [
+        [
+          {
+            "node": "Confidence Routing (D)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confidence Routing (D)": {
+      "main": [
+        [
+          {
+            "node": "Autonomous Block (Wazuh)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram HOTL Escalation",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Autonomous Block (Wazuh)": {
+      "main": [
+        [
+          {
+            "node": "Telegram Log Notify",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

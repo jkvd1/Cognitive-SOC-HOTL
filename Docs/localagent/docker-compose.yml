@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+  agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: localagent
+    restart: unless-stopped
+    user: "1000:1000"
+
+    environment:
+      # ── LLM ────────────────────────────────────────────────────────────────
+      - OLLAMA_HOST=host.docker.internal
+      - OLLAMA_PORT=11434
+      - OLLAMA_MODEL=qwen2.5:3b
+      - OLLAMA_TIMEOUT=120
+
+      # ── Telegram (loaded from .env file) ────────────────────────────────────
+      - TELEGRAM_TOKEN=${TELEGRAM_TOKEN}
+      - ALLOWED_CHAT_IDS=${ALLOWED_CHAT_IDS}
+
+      # ── Workspace ───────────────────────────────────────────────────────────
+      - WORKSPACE_ROOT=/workspace
+
+      # ── Scheduler ───────────────────────────────────────────────────────────
+      - HEARTBEAT_INTERVAL_SEC=1800
+      - IDLE_NUDGE_HOURS=2
+      - TASK_REMINDER_HORIZON_HOURS=24
+
+      # ── Network allowlist ───────────────────────────────────────────────────
+      - ALLOWED_DOMAINS=api.telegram.org
+
+      # ── RSS feeds (comma-separated) ─────────────────────────────────────────
+      - RSS_FEEDS=${RSS_FEEDS:-}
+
+      # ── Agent limits ────────────────────────────────────────────────────────
+      - MAX_TOOL_ROUNDS=3
+      - SHELL_TIMEOUT_SEC=30
+      - CODE_EXEC_TIMEOUT_SEC=15
+
+    volumes:
+      # Only mount the isolated workspace — nothing else
+      - ./workspace:/workspace
+
+    networks:
+      - agent_net
+
+    # ── Hardening ────────────────────────────────────────────────────────────
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:size=64M,mode=1777
+
+    # Resource limits (adjust for 4GB VRAM system)
+    mem_limit: 512m
+    cpus: "1.0"
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  agent_net:
+    driver: bridge
+    # NOTE: Network-level restriction to localhost:11434 and api.telegram.org
+    # must be enforced at the Docker host via iptables (see iptables.sh).
+    # This bridge allows outbound only to whitelisted destinations.

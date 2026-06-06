@@ -1,0 +1,55 @@
+--- V6_cycle3.md
++++ ProposalSkripsiV7.md
+@@ -247,11 +247,11 @@
+ 
+
+ *Buffer Feedback.* Misalkan $\mathcal{B}_t$ menyatakan buffer feedback pada waktu $t$, yang mengakumulasi koreksi analis sejak siklus retraining terakhir:
+
+ 
+
+-$$\mathcal{B}_t = \{(\mathbf{f}_j, y_j^{\text{corrected}}) \mid j \in \text{corrections since } t_{\text{last\_retrain}}\} \tag{6}$$
+
++$$\mathcal{B}_t = \{(\mathbf{f}_j, y_j^{\text{corrected}}) \mid j \in \text{corrections since } t_{\text{last\_retrain}}\} \tag{11}$$
+
+ 
+
+ *Trigger Retraining.* Retraining model diinisiasi ketika buffer mencapai ambang akumulasi minimum:
+
+ 
+
+-$$|\mathcal{B}_t| \geq n_{\text{min}} \quad \text{di mana } n_{\text{min}} = 50 \tag{7}$$
+
++$$|\mathcal{B}_t| \geq n_{\text{min}} \quad \text{di mana } n_{\text{min}} = 50 \tag{12}$$
+
+ 
+
+ Pada estimasi tingkat koreksi harian 8–12% pada ~50–100 IOC, sekitar 4–12 koreksi terakumulasi per hari, menghasilkan jendela trigger 4–12 hari. Jadwal periodik mingguan berfungsi sebagai *safeguard* untuk memastikan retraining terjadi bahkan pada kondisi drift gradual yang tidak menghasilkan koreksi analis yang cukup. Analisis sensitivitas terhadap variasi $n_{\text{min}} \in \{30, 50, 75, 100\}$ akan dilaporkan.
+
+ 
+
+@@ -292,11 +292,11 @@
+ 
+
+ Sebagai referensi, Zhang et al. \[1\] memodelkan respons defender sebagai permainan Bayesian di mana posterior tipe attacker $P(\theta_a | O_{1:t})$ diperbarui melalui:
+
+ 
+
+-$$P(\theta_a | O_{1:t}) \propto P(O_t | \theta_a) \cdot P(\theta_a | O_{1:t-1}) \tag{6}$$
+
++$$P(\theta_a | O_{1:t}) \propto P(O_t | \theta_a) \cdot P(\theta_a | O_{1:t-1}) \tag{11}$$
+
+ 
+
+ dan strategi defender optimal $\sigma^*_d$ diperoleh sebagai:
+
+ 
+
+-$$\sigma^*_d = \arg\max_{\sigma_d} \mathbb{E}_{\theta_a \sim P(\theta_a | O_{1:t})} [u_d(\sigma_d, \sigma_a^*(\theta_a))] \tag{7}$$
+
++$$\sigma^*_d = \arg\max_{\sigma_d} \mathbb{E}_{\theta_a \sim P(\theta_a | O_{1:t})} [u_d(\sigma_d, \sigma_a^*(\theta_a))] \tag{12}$$
+
+ 
+
+ di mana $u_d$ adalah fungsi utilitas defender, $\sigma_a^*(\theta_a)$ adalah strategi optimal attacker tipe $\theta_a$, dan $O_{1:t}$ adalah sekuens observasi hingga waktu $t$.
+
+ 
