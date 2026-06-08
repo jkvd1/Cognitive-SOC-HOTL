@@ -426,7 +426,7 @@ def fig3_mttr_trend():
 
 
 # ═════════════════════════════════════════════════════════
-# FIG 4 — CONFUSION MATRIX (Automated Phase, 493 IOC)
+# FIG 4 — CONFUSION MATRIX (Automated Phase, 840 IOC)
 # ═════════════════════════════════════════════════════════
 def fig4_confusion_matrix():
     """
@@ -438,12 +438,12 @@ def fig4_confusion_matrix():
     # Estimated confusion matrix (rows=Actual, cols=Predicted)
     # Order: Critical, High, Medium, Low
     cm = np.array([
-        [29,  3,  1,  0],   # Actual Critical (33)
-        [ 2, 81,  5,  1],   # Actual High (89)
-        [ 0,  3,139,  5],   # Actual Medium (147)
-        [ 0,  1,  4,219],   # Actual Low (224)
+        [19,  0,  0,  0],   # Actual Critical (19)
+        [ 0, 74,  0,  0],   # Actual High (74)
+        [ 0,  0, 13,  0],   # Actual Low (13)
+        [ 0,  0,  0, 734],  # Actual Medium (734)
     ])
-    classes = ['Critical', 'High', 'Medium', 'Low']
+    classes = ['Critical', 'High', 'Low', 'Medium']
     support = cm.sum(axis=1)
 
     # Compute per-class metrics
@@ -487,7 +487,7 @@ def fig4_confusion_matrix():
     ax1.set_yticklabels([f'Actual {c}\n(n={s})' for c, s in zip(classes, support)], fontsize=8.5)
     ax1.set_xlabel('Predicted Class', fontsize=10, labelpad=8)
     ax1.set_ylabel('Actual Class', fontsize=10, labelpad=8)
-    ax1.set_title('(a) Confusion Matrix — Automated Phase (493 IOC)', fontsize=10, pad=10)
+    ax1.set_title('(a) Confusion Matrix — Automated Phase (840 IOC)', fontsize=10, pad=10)
 
     # Diagonal highlight
     for i in range(4):
@@ -533,8 +533,8 @@ def fig4_confusion_matrix():
         ['High',     f'{precision[1]:.3f}', f'{recall[1]:.3f}', f'{f1[1]:.3f}', f'{support[1]}'],
         ['Medium',   f'{precision[2]:.3f}', f'{recall[2]:.3f}', f'{f1[2]:.3f}', f'{support[2]}'],
         ['Low',      f'{precision[3]:.3f}', f'{recall[3]:.3f}', f'{f1[3]:.3f}', f'{support[3]}'],
-        ['W. avg',   f'{w_f1:.3f}',         '—',                f'{w_f1:.3f}',  '493'],
-        ['M. avg',   f'{m_f1:.3f}',         '—',                f'{m_f1:.3f}',  '493'],
+        ['W. avg',   f'{w_f1:.3f}',         '—',                f'{w_f1:.3f}',  '840'],
+        ['M. avg',   f'{m_f1:.3f}',         '—',                f'{m_f1:.3f}',  '840'],
     ]
     tbl = ax2.table(cellText=table_data[1:], colLabels=table_data[0],
                     loc='lower center', cellLoc='center',
@@ -549,7 +549,7 @@ def fig4_confusion_matrix():
             cell.set_facecolor('#E8F5E9')
 
     fig.suptitle('Fig. 4 — Classification Performance: Confusion Matrix & Per-Class Metrics\n'
-                 'Automated Phase  ·  493 IOC  ·  4-Class Threat Taxonomy',
+                 'Automated Phase  ·  840 IOC  ·  4-Class Threat Taxonomy',
                  fontsize=11, fontweight='bold', y=1.02)
 
     fig.subplots_adjust(bottom=0.22)

@@ -512,7 +512,7 @@ def fig2_feedback_loop_9_16():
 
     # Note Box (positioned with generous spacing at y = 2.9 to clear legend clipping!)
     ax.text(W/2, 2.9,
-        'Note: During the 14-day experiment, 31 analyst corrections were\n'
+        'Note: During the 14-day experiment, analyst corrections were\n'
         'collected (< n_min = 50). Retraining was not triggered empirically.\n'
         'Prospective simulation: F1-Score macro: 0.934 -> 0.941\n'
         '(p = 0.18, statistically non-significant in 14-day window).',
@@ -651,7 +651,7 @@ def fig3_experimental_results_9_16():
     ax3.set_xticklabels([f'D{d}' for d in days_a], fontsize=13.0)
     ax3.set_xlabel('Day (Automated Phase Only)', fontsize=14.5, fontweight='bold')
     ax3.set_ylabel('Performance Score', fontsize=14.5, fontweight='bold')
-    ax3.set_title('(c) Classification Performance — Automated Phase (493 IOC)', fontsize=15.5, fontweight='bold', pad=10)
+    ax3.set_title('(c) Classification Performance — Automated Phase (840 IOC)', fontsize=15.5, fontweight='bold', pad=10)
     ax3.legend(fontsize=12.5, loc='lower right')
     ax3.grid(linestyle='--', alpha=0.5)
 
@@ -668,12 +668,12 @@ def fig3_experimental_results_9_16():
 def fig4_confusion_matrix_9_16():
     """Fig. 4: 4x4 Confusion Matrix and Per-Class Metrics — 9:16 Vertical Academic Layout"""
     cm = np.array([
-        [29,  3,  1,  0],   # Actual Critical (33)
-        [ 2, 81,  5,  1],   # Actual High (89)
-        [ 0,  3,139,  5],   # Actual Medium (147)
-        [ 0,  1,  4,219],   # Actual Low (224)
+        [19,  0,  0,  0],   # Actual Critical (19)
+        [ 0, 74,  0,  0],   # Actual High (74)
+        [ 0,  0, 13,  0],   # Actual Low (13)
+        [ 0,  0,  0, 734],  # Actual Medium (734)
     ])
-    classes = ['Critical', 'High', 'Medium', 'Low']
+    classes = ['Critical', 'High', 'Low', 'Medium']
     support = cm.sum(axis=1)
 
     # Compute per-class metrics
@@ -715,7 +715,7 @@ def fig4_confusion_matrix_9_16():
     ax1.set_yticklabels([f'Actual {c}\n(n={s})' for c, s in zip(classes, support)], fontsize=12.0, fontweight='bold')
     ax1.set_xlabel('Predicted Class', fontsize=13.5, fontweight='bold', labelpad=10)
     ax1.set_ylabel('Actual Class', fontsize=13.5, fontweight='bold', labelpad=10)
-    ax1.set_title('(a) Confusion Matrix — Automated Phase (493 IOC)', fontsize=15.5, fontweight='bold', pad=15)
+    ax1.set_title('(a) Confusion Matrix — Automated Phase (840 IOC)', fontsize=15.5, fontweight='bold', pad=15)
 
     # Diagonal highlight
     for i in range(4):
@@ -759,8 +759,8 @@ def fig4_confusion_matrix_9_16():
         ['High',     f'{precision[1]:.3f}', f'{recall[1]:.3f}', f'{f1[1]:.3f}', f'{support[1]}'],
         ['Medium',   f'{precision[2]:.3f}', f'{recall[2]:.3f}', f'{f1[2]:.3f}', f'{support[2]}'],
         ['Low',      f'{precision[3]:.3f}', f'{recall[3]:.3f}', f'{f1[3]:.3f}', f'{support[3]}'],
-        ['W. avg',   f'{w_f1:.3f}',         '—',                f'{w_f1:.3f}',  '493'],
-        ['M. avg',   f'{m_f1:.3f}',         '—',                f'{m_f1:.3f}',  '493'],
+        ['W. avg',   f'{w_f1:.3f}',         '—',                f'{w_f1:.3f}',  '840'],
+        ['M. avg',   f'{m_f1:.3f}',         '—',                f'{m_f1:.3f}',  '840'],
     ]
     tbl = ax3.table(cellText=table_data[1:], colLabels=table_data[0],
                     loc='center', cellLoc='center',
@@ -782,7 +782,7 @@ def fig4_confusion_matrix_9_16():
     ax3.set_title('(c) Performance Metrics Summary Table', fontsize=15.5, fontweight='bold', pad=10)
 
     fig.suptitle('Fig. 4. Classification Performance: Confusion Matrix & Per-Class Metrics\n'
-                 'Automated Phase  ·  493 IOC  ·  4-Class Threat Taxonomy',
+                 'Automated Phase  ·  840 IOC  ·  4-Class Threat Taxonomy',
                  fontsize=18.0, fontweight='bold', y=1.01)
 
     plt.tight_layout(rect=[0, 0, 1, 0.98])

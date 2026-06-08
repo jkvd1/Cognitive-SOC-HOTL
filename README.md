@@ -2,7 +2,7 @@
 
 An automated Cognitive Security Operations Center (SOC) architecture designed to implement the Human-On-The-Loop (HOTL) paradigm for threat triage and IDS rule deployment.
 
-The machine learning classifier is a **Random Forest** model trained using contextual threat intelligence features from real-world indicators (Cyfirma) and botnet flow logs (CTU-13). It classifies Indicators of Compromise (IOC) into a four-class threat taxonomy (Low, Medium, High, Critical) and performs confidence-based routing to escalate or autonomously block threats.
+The machine learning classifier is a **Random Forest** model trained using contextual threat intelligence features from real-world indicators (Cyfirma). It classifies Indicators of Compromise (IOC) into a four-class threat taxonomy (Low, Medium, High, Critical) and performs confidence-based routing to escalate or autonomously block threats.
 
 This repository contains the complete dataset, configurations, and Jupyter Notebook to train and evaluate the model.
 
@@ -40,11 +40,10 @@ This repository contains the complete dataset, configurations, and Jupyter Noteb
 ---
 
 ## 📊 Results
-The classifier and architecture achieved the following results during the 14-day experiment:
-- **Accuracy:** 94.93%
-- **Weighted F1-Score:** 0.949
-- **Macro F1-Score:** 0.934
-- **FPR (binary threat sense):** 2.23% (a 72.6% reduction from manual baseline of 8.14%)
+The classifier and architecture achieved the following results during validation and the 14-day experiment:
+- **Accuracy:** 100.00% (Cyfirma-only validation set)
+- **Weighted F1-Score:** 1.000
+- **Macro F1-Score:** 1.000
 - **MTTR Reduction:** 99.39% reduction (from 1,789.6s manual response to 10.93s automated response)
 - **IDS Rule Acceptance Rate:** 92.62% accepted without modification (113/122 rules)
 

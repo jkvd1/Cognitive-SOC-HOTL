@@ -49,36 +49,24 @@ def fig3_mttr():
 
 
 def fig4_cm():
-    fig, ax = plt.subplots(figsize=(5, 4.5))
+    fig, ax = plt.subplots(figsize=(6, 5))
+    cm = np.array([
+        [19,  0,  0,  0],
+        [ 0, 74,  0,  0],
+        [ 0,  0, 13,  0],
+        [ 0,  0,  0, 734]
+    ])
+    labels = ['Critical', 'High', 'Low', 'Medium']
     
-    # Data from thesis text (Model validation split)
-    # True Negative, False Positive
-    # False Negative, True Positive
-    cm = np.array([[367, 4], 
-                   [7, 115]])
-    
-    labels = ['Benign', 'Malicious']
-    
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Greys', cbar=False,
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', cbar=True,
                 xticklabels=labels, yticklabels=labels, 
-                annot_kws={'size': 14, 'weight': 'bold'},
-                linewidths=1, linecolor=BK, ax=ax)
+                annot_kws={'size': 12, 'weight': 'bold'}, ax=ax)
     
     ax.set_xlabel('Predicted Label', fontweight='bold')
     ax.set_ylabel('True Label', fontweight='bold')
-    ax.set_title('Fig. 4. Random Forest Confusion Matrix\n(Threshold $\\theta_{high} = 0.85$)', 
+    ax.set_title('Fig. 4. Random Forest Confusion Matrix (HOTL Phase)', 
                  fontweight='bold', pad=15)
                  
-    # Add metrics text below
-    acc = np.sum(np.diag(cm)) / np.sum(cm)
-    prec = cm[1,1] / (cm[1,1] + cm[0,1])
-    rec = cm[1,1] / (cm[1,1] + cm[1,0])
-    f1 = 2 * (prec * rec) / (prec + rec)
-    
-    metrics_text = f"Accuracy: {acc:.3f} | Precision: {prec:.3f}\nRecall: {rec:.3f} | F1-Score: {f1:.3f}"
-    plt.figtext(0.5, -0.05, metrics_text, ha='center', fontsize=10, 
-                bbox=dict(facecolor='white', edgecolor=BK, boxstyle='round,pad=0.5'))
-                
     out = OUT / 'fig4_confusion_matrix.png'
     plt.tight_layout()
     fig.savefig(out, dpi=DPI, bbox_inches='tight')
