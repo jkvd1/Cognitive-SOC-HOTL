@@ -14,7 +14,7 @@
 
 ## 1. Summary
 
-This manuscript presents a Cognitive SOC architecture implementing a Human-On-The-Loop (HOTL) paradigm through a four-layer pipeline: (1) Data Acquisition & Fusion, (2) Threat Analysis & Correlation via Random Forest, (3) Orchestration & Decision Logic with confidence-based routing, and (4) Execution & Adaptive Feedback with Page-Hinkley drift detection. The system ingests IOC from Cyfirma TIP, classifies them, autonomously generates Wazuh IDS rules, and provides analyst oversight via Telegram.
+This manuscript presents a Cognitive SOC architecture implementing a Human-On-The-Loop (HOTL) paradigm through a four-layer pipeline: (1) Data Acquisition & Fusion, (2) Threat Analysis & Correlation via Random Forest, (3) Orchestration & Decision Logic with confidence-based routing, and (4) Execution & Adaptive Feedback with Page-Hinkley drift detection. The system ingests IOC from TIP TIP, classifies them, autonomously generates Wazuh IDS rules, and provides analyst oversight via Telegram.
 
 **Progress since V3 review:** The manuscript has improved *substantially*:
 - Four-layer architecture now explicitly maps to AIR [1] Layers 1–4 with a dedicated comparison table (TABEL III)

@@ -295,7 +295,7 @@ def fig1_architecture_9_16():
     # ── LAYER 1: Stacked Vertically with wide, safe spacing ──
     CX = 5.20
     L1_bottoms = [12.39, 13.47, 14.39]
-    b_tip = proc_box(ax, CX-box_w/2, L1_bottoms[2], box_w, BH, 'Cyfirma TIP', 'REST API Source', fill=BLUE_F, border_color=BLUE_B, fs=10.5)
+    b_tip = proc_box(ax, CX-box_w/2, L1_bottoms[2], box_w, BH, 'TIP TIP', 'REST API Source', fill=BLUE_F, border_color=BLUE_B, fs=10.5)
     b_etl = proc_box(ax, CX-box_w/2, L1_bottoms[1], box_w, BH, 'ETL & Normalize', 'T_norm: e_i -> B_i\n(Eq. 1)', fill=BLUE_F, border_color=BLUE_B, fs=10.0)
     b_temp = proc_box(ax, CX-box_w/2, L1_bottoms[0], box_w, BH, 'Temporal Fusion\n& Dedup', 'F_fuse, dt = 3600s\n(Eq. 2)', fill=BLUE_F, border_color=BLUE_B, fs=10.0)
 

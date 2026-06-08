@@ -21,7 +21,7 @@ latensi deteksi dan tingginya tingkat positif palsu (false positive).
 Penelitian ini mengusulkan dan mengevaluasi kerangka kerja Security 
 Orchestration, Automation, and Response (SOAR) menggunakan pendekatan low-code 
 untuk mengotomatisasi threat intelligence lifecycle. Melalui integrasi antara 
-Threat Intelligence Platform (Cyfirma), mesin orkestrasi (n8n), SIEM (Wazuh) 
+Threat Intelligence Platform (TIP), mesin orkestrasi (n8n), SIEM (Wazuh) 
 dengan algoritma Machine Learning untuk deteksi anomali, dan validasi 
 Human-in-the-Loop (HITL), penelitian ini bertujuan untuk mengukur dampak 
 operasional sistem terhadap pengurangan latensi respons, peningkatan akurasi 
@@ -125,7 +125,7 @@ merumuskan pertanyaan penelitian sebagai berikut:
 
 1. Bagaimana merancang arsitektur orkestrasi berbasis low-code yang mampu 
    mengotomatisasi lifecycle threat intelligence (akuisisi, normalisasi, 
-   validasi) dari Cyfirma TIP secara andal dengan integrasi algoritma Machine 
+   validasi) dari TIP TIP secara andal dengan integrasi algoritma Machine 
    Learning untuk deteksi anomali?
 
 2. Seberapa signifikan dampak penerapan sistem otomatisasi tersebut terhadap 
@@ -153,7 +153,7 @@ Tujuan spesifik dari penelitian ini adalah:
 
 1. Membangun Artefak
    - Mengembangkan prototipe sistem orkestrasi keamanan (SOAR) menggunakan 
-     platform low-code (n8n) yang terintegrasi dengan Cyfirma TIP (sumber data), 
+     platform low-code (n8n) yang terintegrasi dengan TIP TIP (sumber data), 
      Wazuh (SIEM), algoritma Machine Learning untuk deteksi anomali IOC, dan 
      Telegram (antarmuka analis).
 
@@ -223,9 +223,9 @@ B. MANFAAT PRAKTIS:
 --------------------------------------------------------------------------------
 
 1. Sumber Data: Fokus pada Indicators of Compromise (IOC) jenis IP, Domain, dan 
-   Hash File dari Cyfirma TIP.
+   Hash File dari TIP TIP.
 
-2. Teknologi: Menggunakan Cyfirma (TIP), n8n (orkestrator), Wazuh (SIEM/Log 
+2. Teknologi: Menggunakan TIP (TIP), n8n (orkestrator), Wazuh (SIEM/Log 
    management dengan integrasi ML), Telegram (Alerting), dan algoritma Machine 
    Learning (Random Forest/XGBoost) untuk deteksi anomali.
 
@@ -596,7 +596,7 @@ memastikan reprodusibilitas eksperimen.
 
 A. KOMPONEN SISTEM:
 
-1. Sumber Threat Intelligence: Cyfirma TIP
+1. Sumber Threat Intelligence: TIP TIP
    - Menyediakan feed data IOC (IP, Domain, Hash) melalui REST API yang aman
    - Data ini dianggap sebagai ground truth untuk eksperimen
 
@@ -623,7 +623,7 @@ A. KOMPONEN SISTEM:
 B. ALUR KERJA SISTEM DENGAN INTEGRASI ML:
 
 Fase 1: Ingesti dan Preprocessing
-- Data ditarik (poll) dari Cyfirma oleh n8n setiap 5 menit menggunakan API
+- Data ditarik (poll) dari TIP oleh n8n setiap 5 menit menggunakan API
 - Data IOC dinormalisasi ke format standar (STIX 2.1)
 - Ekstraksi fitur untuk analisis ML (confidence score, threat level, reputation score)
 
@@ -736,7 +736,7 @@ Data dikumpulkan melalui simulasi operasional selama 14 hari kerja dengan
 tahapan sebagai berikut:
 
 FASE 1: BASELINE (MANUAL) - HARI 1-7
-- Tim analis melakukan pemantauan manual terhadap dasbor Cyfirma
+- Tim analis melakukan pemantauan manual terhadap dasbor TIP
 - Setiap kali IOC baru dengan tingkat keparahan "High" muncul, analis mencatat 
   waktu deteksi, melakukan verifikasi manual, dan mengirimkan notifikasi
 - Semua stempel waktu (timestamp) dicatat secara manual

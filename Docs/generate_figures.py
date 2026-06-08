@@ -107,8 +107,8 @@ def fig1_architecture():
                 fontsize=6.3, color=lc, alpha=0.85, zorder=2)
 
     # ── LAYER 1 COMPONENTS ───────────────────────────────
-    # Cyfirma TIP
-    box(ax, 1.65, 5.5, 1.5, 0.9, 'Cyfirma TIP', 'REST API Polling', C['L1'])
+    # TIP TIP
+    box(ax, 1.65, 5.5, 1.5, 0.9, 'TIP TIP', 'REST API Polling', C['L1'])
     # ETL/Normalize
     box(ax, 3.45, 5.5, 1.6, 0.9, 'ETL & Normalize', 'T_norm : e_i → B_i  (Eq.1)', C['L1'])
     # Temporal Fusion

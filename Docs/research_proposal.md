@@ -11,7 +11,7 @@
 
 ## Abstract
 
-Modern Security Operations Centers (SOCs) face an escalating volume of cyber threats that exceed human analyst capacity, creating critical bottlenecks in incident response workflows. The manual transfer of Indicators of Compromise (IOCs)—such as malicious IP addresses and command-and-control domains—from Threat Intelligence Platforms (TIPs) to operational security teams introduces significant latency, increasing the Mean Time to Respond (MTTR) and expanding the Window of Exposure during active attacks. This research proposes the design and implementation of an automated network threat intelligence pipeline using n8n, a low-code workflow automation platform, to orchestrate real-time IOC distribution from the Cyfirma TIP via REST API. The system architecture comprises three core components: API-based data ingestion from Cyfirma, automated data normalization and false-positive filtering within n8n workflows, and real-time alert dissemination through Telegram Bot API with human-in-the-loop validation gates. By eliminating manual data entry and accelerating threat intelligence propagation, this automation pipeline aims to reduce processing time from minutes to seconds, minimize human error, and enhance overall network security posture through proactive defense mechanisms. The proposed system addresses a critical operational gap in contemporary SOC workflows and demonstrates practical application of Security Orchestration, Automation, and Response (SOAR) principles in resource-constrained environments.
+Modern Security Operations Centers (SOCs) face an escalating volume of cyber threats that exceed human analyst capacity, creating critical bottlenecks in incident response workflows. The manual transfer of Indicators of Compromise (IOCs)—such as malicious IP addresses and command-and-control domains—from Threat Intelligence Platforms (TIPs) to operational security teams introduces significant latency, increasing the Mean Time to Respond (MTTR) and expanding the Window of Exposure during active attacks. This research proposes the design and implementation of an automated network threat intelligence pipeline using n8n, a low-code workflow automation platform, to orchestrate real-time IOC distribution from the TIP TIP via REST API. The system architecture comprises three core components: API-based data ingestion from TIP, automated data normalization and false-positive filtering within n8n workflows, and real-time alert dissemination through Telegram Bot API with human-in-the-loop validation gates. By eliminating manual data entry and accelerating threat intelligence propagation, this automation pipeline aims to reduce processing time from minutes to seconds, minimize human error, and enhance overall network security posture through proactive defense mechanisms. The proposed system addresses a critical operational gap in contemporary SOC workflows and demonstrates practical application of Security Orchestration, Automation, and Response (SOAR) principles in resource-constrained environments.
 
 ---
 
@@ -34,13 +34,13 @@ The contemporary cyber threat landscape is characterized by an exponential incre
 
 ### 1.2 Problem Statement
 
-Despite significant investments in Threat Intelligence Platforms and security tooling, many organizations continue to rely on manual processes for operationalizing threat intelligence. In the current operational environment at [Organization Name], IOCs retrieved from the Cyfirma TIP—including malicious IP addresses, domain names, file hashes, and other technical indicators—are manually extracted, validated, and disseminated to security teams for remediation. This manual workflow introduces multiple failure points: human transcription errors compromise data integrity, processing delays extend the Window of Exposure, and analyst fatigue from repetitive tasks reduces overall SOC effectiveness. The latency inherent in manual data transfer creates a critical bottleneck between threat detection and remediation, directly impacting MTTR and organizational risk posture. Furthermore, the lack of standardized data formats and automated validation mechanisms increases the likelihood of false positives reaching production security controls, potentially disrupting legitimate business operations. These operational inefficiencies underscore the urgent need for automated orchestration mechanisms that can bridge the gap between threat intelligence acquisition and operational response.
+Despite significant investments in Threat Intelligence Platforms and security tooling, many organizations continue to rely on manual processes for operationalizing threat intelligence. In the current operational environment at [Organization Name], IOCs retrieved from the TIP TIP—including malicious IP addresses, domain names, file hashes, and other technical indicators—are manually extracted, validated, and disseminated to security teams for remediation. This manual workflow introduces multiple failure points: human transcription errors compromise data integrity, processing delays extend the Window of Exposure, and analyst fatigue from repetitive tasks reduces overall SOC effectiveness. The latency inherent in manual data transfer creates a critical bottleneck between threat detection and remediation, directly impacting MTTR and organizational risk posture. Furthermore, the lack of standardized data formats and automated validation mechanisms increases the likelihood of false positives reaching production security controls, potentially disrupting legitimate business operations. These operational inefficiencies underscore the urgent need for automated orchestration mechanisms that can bridge the gap between threat intelligence acquisition and operational response.
 
 ### 1.3 Research Objectives
 
 This research aims to design, implement, and evaluate an automated network threat intelligence pipeline that addresses the operational challenges identified above. The primary objectives are:
 
-1. **Design a real-time API-based orchestration system** that automatically retrieves IOC data from the Cyfirma TIP using REST API calls, eliminating manual data extraction processes.
+1. **Design a real-time API-based orchestration system** that automatically retrieves IOC data from the TIP TIP using REST API calls, eliminating manual data extraction processes.
 
 2. **Implement automated data processing workflows** within the n8n platform to normalize IOC formats, filter false positives, and enrich threat intelligence with contextual metadata.
 
@@ -84,9 +84,9 @@ While automation offers substantial operational benefits, the literature consist
 
 The proposed automated threat intelligence pipeline implements a three-stage architecture: **Ingestion → Normalization → Dissemination**. This design follows established SOAR orchestration patterns documented in recent literature [1], [6], adapted for deployment in a resource-constrained SOC environment. The system leverages n8n, an open-source low-code workflow automation platform, as the central orchestration engine. While the academic literature does not provide empirical validation of n8n specifically in cybersecurity contexts, the platform's REST API capabilities, JSON processing functions, and extensible connector architecture align with documented best practices for API-driven threat intelligence orchestration [1], [6].
 
-### 3.2 Data Source: Cyfirma Threat Intelligence Platform
+### 3.2 Data Source: TIP Threat Intelligence Platform
 
-The primary data source for this pipeline is the Cyfirma TIP, a commercial threat intelligence platform that aggregates IOCs from multiple global threat feeds. The system retrieves threat intelligence data via Cyfirma's REST API, which provides structured JSON responses containing IOC metadata including:
+The primary data source for this pipeline is the TIP TIP, a commercial threat intelligence platform that aggregates IOCs from multiple global threat feeds. The system retrieves threat intelligence data via TIP's REST API, which provides structured JSON responses containing IOC metadata including:
 
 - **Malicious IP addresses** (IPv4 and IPv6)
 - **Command-and-control (C2) domain names**
@@ -102,7 +102,7 @@ The n8n platform serves as the core processing engine, implementing the followin
 
 #### 3.3.1 Data Ingestion Workflow
 
-1. **API Request Node**: Executes authenticated HTTP GET requests to Cyfirma API endpoints
+1. **API Request Node**: Executes authenticated HTTP GET requests to TIP API endpoints
 2. **JSON Parser Node**: Extracts IOC data from API responses and validates schema compliance
 3. **Error Handling**: Implements retry logic and fallback mechanisms for API failures
 
@@ -111,7 +111,7 @@ The n8n platform serves as the core processing engine, implementing the followin
 1. **Format Standardization**: Converts IOC data to consistent internal schema (aligned with STIX 2.1 object models where applicable)
 2. **Deduplication**: Compares incoming IOCs against historical database to eliminate redundant alerts
 3. **False Positive Filtering**: Applies configurable whitelists to exclude known-good infrastructure (e.g., legitimate CDN IPs, corporate domains)
-4. **Confidence Thresholding**: Filters IOCs based on Cyfirma confidence scores (default threshold: ≥70%) to reduce noise
+4. **Confidence Thresholding**: Filters IOCs based on TIP confidence scores (default threshold: ≥70%) to reduce noise
 5. **Enrichment**: Appends contextual metadata including threat type classification, geographic origin, and recommended remediation actions
 
 #### 3.3.3 Data Quality Validation
@@ -188,7 +188,7 @@ These metrics enable continuous optimization and provide quantitative evidence o
 
 ### 4.1 Reduction in Processing Time
 
-The primary expected outcome is a dramatic reduction in IOC processing time. Based on empirical evidence from similar automated incident response systems [1], the proposed pipeline is expected to reduce processing time from the current manual baseline (estimated 5-15 minutes per IOC batch) to near-real-time performance (under 60 seconds from API ingestion to analyst notification). This improvement directly addresses the Window of Exposure problem by accelerating the transition from threat detection to defensive action. The automated workflow eliminates multiple manual steps including: logging into the Cyfirma portal, manually copying IOC data, formatting for internal systems, and distributing via email or ticketing systems. By replacing these manual processes with API-driven automation, the system is expected to achieve processing latencies comparable to the 58.3 ms end-to-end performance reported in advanced AIR systems [1], though actual performance will depend on API response times and network latency in the deployment environment.
+The primary expected outcome is a dramatic reduction in IOC processing time. Based on empirical evidence from similar automated incident response systems [1], the proposed pipeline is expected to reduce processing time from the current manual baseline (estimated 5-15 minutes per IOC batch) to near-real-time performance (under 60 seconds from API ingestion to analyst notification). This improvement directly addresses the Window of Exposure problem by accelerating the transition from threat detection to defensive action. The automated workflow eliminates multiple manual steps including: logging into the TIP portal, manually copying IOC data, formatting for internal systems, and distributing via email or ticketing systems. By replacing these manual processes with API-driven automation, the system is expected to achieve processing latencies comparable to the 58.3 ms end-to-end performance reported in advanced AIR systems [1], though actual performance will depend on API response times and network latency in the deployment environment.
 
 ### 4.2 Elimination of Manual Data Entry Errors
 
@@ -228,7 +228,7 @@ This research proposal presents a practical, cost-effective approach to implemen
 
 The expected results—dramatic reductions in processing time, elimination of manual errors, and improved network security posture—directly address the research objectives and provide measurable value to the organization. By minimizing the Window of Exposure and reducing MTTR, this system contributes to a more resilient defensive posture against contemporary cyber threats. Furthermore, this research demonstrates the feasibility of implementing SOAR principles using accessible, low-code platforms, potentially lowering the barrier to entry for organizations lacking resources for enterprise SOAR solutions.
 
-Future work will focus on system implementation, empirical evaluation of operational metrics, and iterative refinement based on analyst feedback. Additional research directions include integration of machine learning models for automated false positive filtering, expansion to additional threat intelligence sources beyond Cyfirma, and investigation of fully autonomous remediation workflows for high-confidence, low-risk IOCs. This research contributes to the growing body of knowledge on practical threat intelligence automation and operational security optimization, with potential applications across diverse organizational contexts.
+Future work will focus on system implementation, empirical evaluation of operational metrics, and iterative refinement based on analyst feedback. Additional research directions include integration of machine learning models for automated false positive filtering, expansion to additional threat intelligence sources beyond TIP, and investigation of fully autonomous remediation workflows for high-confidence, low-risk IOCs. This research contributes to the growing body of knowledge on practical threat intelligence automation and operational security optimization, with potential applications across diverse organizational contexts.
 
 ---
 

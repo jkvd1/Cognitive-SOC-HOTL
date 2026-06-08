@@ -13,11 +13,11 @@
     },
     {
       "parameters": {
-        "url": "https://api.cyfirma.com/v1/ioc",
+        "url": "https://api.tip.com/v1/ioc",
         "authentication": "headerAuth",
         "options": {}
       },
-      "name": "Cyfirma TIP Ingestion",
+      "name": "TIP TIP Ingestion",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 3,
       "position": [300, 300]
@@ -102,14 +102,14 @@
       "main": [
         [
           {
-            "node": "Cyfirma TIP Ingestion",
+            "node": "TIP TIP Ingestion",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Cyfirma TIP Ingestion": {
+    "TIP TIP Ingestion": {
       "main": [
         [
           {

@@ -8,7 +8,7 @@ Render this using Mermaid Live Editor (https://mermaid.live) or any Mermaid-comp
 flowchart TB
     subgraph L1["<b>LAYER 1: Data Acquisition & Fusion Space</b>"]
         direction LR
-        TIP["🔒 Cyfirma TIP API<br/><i>REST Polling</i>"]
+        TIP["🔒 TIP TIP API<br/><i>REST Polling</i>"]
         ETL["⚙️ ETL & Normalisasi<br/><i>T_norm (Pers. 1)</i>"]
         DEDUP["🔄 Fusi Temporal &<br/>Deduplikasi<br/><i>F_fuse (Pers. 2)</i>"]
         TIP --> ETL --> DEDUP

@@ -1,10 +1,10 @@
 /**
  * n8n JavaScript Code Node
  * 
- * Filters and extracts raw CYFIRMA STIX IOC data from IOC.json / TIP API response
+ * Filters and extracts raw TIP STIX IOC data from IOC.json / TIP API response
  * into the exact normalized schema (15 features) described in Table II of the thesis.
  * 
- * Input: Array of raw CYFIRMA STIX indicator objects.
+ * Input: Array of raw TIP STIX indicator objects.
  * Output: Normalized features ready for machine learning classification.
  */
 

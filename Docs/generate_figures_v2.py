@@ -144,15 +144,15 @@ def fig1_ieee():
     lane(ax, L3_YB, L3_BH, LPAD, W, 'LAYER 3', 'Orchestration &\nDecision Logic', L3_BG, L3_LBL)
     lane(ax, L4_YB, L4_BH, LPAD, W, 'LAYER 4', 'Execution &\nAdaptive Feedback', L4_BG, L4_LBL)
 
-    # ── LAYER 1: Cyfirma → ETL → Temporal Fusion ───────────────
+    # ── LAYER 1: TIP → ETL → Temporal Fusion ───────────────
     L1_YC = L1_YB + L1_BH/2   # 9.6
     L1_BB = L1_YC - BH/2
 
-    X1 = LPAD+0.2; W1 = 1.85   # Cyfirma
+    X1 = LPAD+0.2; W1 = 1.85   # TIP
     X2 = X1+W1+0.3; W2 = 2.15  # ETL
     X3 = X2+W2+0.3; W3 = 2.45  # Temporal Fusion
 
-    proc_box(ax, X1, L1_BB, W1, BH, 'Cyfirma TIP', 'REST API Source', fill=BLUE_F, border_color=BLUE_B)
+    proc_box(ax, X1, L1_BB, W1, BH, 'TIP TIP', 'REST API Source', fill=BLUE_F, border_color=BLUE_B)
     proc_box(ax, X2, L1_BB, W2, BH, 'ETL & Normalize', 'T_norm: e_i -> B_i\n(Eq. 1)', fill=BLUE_F, border_color=BLUE_B)
     proc_box(ax, X3, L1_BB, W3, BH, 'Temporal Fusion\n& Dedup', 'F_fuse, dt=3600s  (Eq. 2)', fill=BLUE_F, border_color=BLUE_B, fs=8)
 

@@ -2,7 +2,7 @@
 
 An automated Cognitive Security Operations Center (SOC) architecture designed to implement the Human-On-The-Loop (HOTL) paradigm for threat triage and IDS rule deployment.
 
-The machine learning classifier is a **Random Forest** model trained using contextual threat intelligence features from real-world indicators (Cyfirma). It classifies Indicators of Compromise (IOC) into a four-class threat taxonomy (Low, Medium, High, Critical) and performs confidence-based routing to escalate or autonomously block threats.
+The machine learning classifier is a **Random Forest** model trained using contextual threat intelligence features from real-world indicators (TIP). It classifies Indicators of Compromise (IOC) into a four-class threat taxonomy (Low, Medium, High, Critical) and performs confidence-based routing to escalate or autonomously block threats.
 
 This repository contains the complete dataset, configurations, and Jupyter Notebook to train and evaluate the model.
 
@@ -10,7 +10,7 @@ This repository contains the complete dataset, configurations, and Jupyter Noteb
 
 ## 📁 Repository Structure
 * `Data/`
-  * `IOC.json` - 4,200 real Cyfirma IOCs (STIX format).
+  * `IOC.json` - 4,200 real TIP IOCs (STIX format).
   * `hasil_kuantitatif_harian.csv` - Daily quantitative metrics from the 14-day experiment.
   * `research_filtered_iocs.json` - Complete dataset of 960 indicators processed.
   * `wazuh_rules_generated.xml` - 122 autonomously synthesized Wazuh rules.
@@ -41,7 +41,7 @@ This repository contains the complete dataset, configurations, and Jupyter Noteb
 
 ## 📊 Results
 The classifier and architecture achieved the following results during validation and the 14-day experiment:
-- **Accuracy:** 100.00% (Cyfirma-only validation set)
+- **Accuracy:** 100.00% (TIP-only validation set)
 - **Weighted F1-Score:** 1.000
 - **Macro F1-Score:** 1.000
 - **MTTR Reduction:** 99.39% reduction (from 1,789.6s manual response to 10.93s automated response)

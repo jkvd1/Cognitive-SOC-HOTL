@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <group name="local,cognitive_soc,">
-   <!-- Generated autonomously by Cognitive SOC Agent Swarm (HOTL) using Cyfirma IOCs -->
+   <!-- Generated autonomously by Cognitive SOC Agent Swarm (HOTL) using TIP IOCs -->
    <rule id="100001" level="7">
       <field name="srcip">104.152.52.103</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 104.152.52.103</description>

@@ -326,7 +326,7 @@ def generate_wazuh_xml(wazuh_rules):
     rules_to_write = wazuh_rules[:122]
     
     group = ET.Element('group', name='local,cognitive_soc,')
-    group.append(ET.Comment(' Generated autonomously by Cognitive SOC Agent Swarm (HOTL) using Cyfirma IOCs '))
+    group.append(ET.Comment(' Generated autonomously by Cognitive SOC Agent Swarm (HOTL) using TIP IOCs '))
     
     for r_id, name, ioc_type in rules_to_write:
         rule = ET.SubElement(group, 'rule', id=str(r_id), level='7')

@@ -106,11 +106,11 @@ def fig1_v3():
     L1_YC = L1_YB + L1_BH/2
     L1_BB = L1_YC - BH/2
 
-    X1=LPAD+0.25; W1=2.0    # Cyfirma
+    X1=LPAD+0.25; W1=2.0    # TIP
     X2=X1+W1+0.35; W2=2.35  # ETL
     X3=X2+W2+0.35; W3=2.65  # Temporal Fusion
 
-    proc_box(ax, X1, L1_BB, W1, BH, 'Cyfirma TIP', 'REST API Source', fill=GRAY_SRC)
+    proc_box(ax, X1, L1_BB, W1, BH, 'TIP TIP', 'REST API Source', fill=GRAY_SRC)
     proc_box(ax, X2, L1_BB, W2, BH, 'ETL & Normalize', 'T_norm: e_i -> B_i  (Eq. 1)')
     proc_box(ax, X3, L1_BB, W3, BH, 'Temporal Fusion\n& Dedup', 'F_fuse,  dt=3600s  (Eq. 2)', fs=8.2)
 

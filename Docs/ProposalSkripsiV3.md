@@ -19,7 +19,7 @@ Kecepatan deteksi dan remediasi ancaman menjadi determinan kritis bagi ketahanan
 
 Cyber Threat Intelligence (CTI) berfungsi sebagai elemen fundamental dalam pertahanan proaktif dengan menyediakan informasi yang dapat ditindaklanjuti (actionable intelligence) mengenai taktik, teknik, dan prosedur (TTPs), serta infrastruktur musuh. Namun, nilai operasional CTI berbanding lurus dengan kecepatan dan akurasi dalam menerjemahkan intelijen tersebut menjadi aksi defensif yang konkret. Berdasarkan latar belakang di atas, penelitian ini mengidentifikasi pain points spesifik dalam operasi SOC manual yang menjadi fokus investigasi:
 
-- **Lambatnya Ingesti Manual (_Manual Ingestion Latency_):** Proses pemantauan dasbor TIP, ekstraksi IOC, dan verifikasi manual memakan waktu yang signifikan. Kesenjangan waktu antara publikasi ancaman oleh penyedia intelijen (seperti Cyfirma) dan tindakan defensif oleh SOC memberikan keuntungan taktis bagi penyerang.
+- **Lambatnya Ingesti Manual (_Manual Ingestion Latency_):** Proses pemantauan dasbor TIP, ekstraksi IOC, dan verifikasi manual memakan waktu yang signifikan. Kesenjangan waktu antara publikasi ancaman oleh penyedia intelijen (seperti TIP) dan tindakan defensif oleh SOC memberikan keuntungan taktis bagi penyerang.
 - **Tingginya Tingkat False Positive:** Tanpa mekanisme penyaringan otomatis berbasis _confidence score_ dan deduplikasi, analis sering kali menerima data mentah yang belum diverifikasi. Studi menunjukkan bahwa tingkat false positive di lingkungan SOC dapat mencapai 68% dari keseluruhan alert \[1\], membuang siklus kerja yang berharga.
 - **Beban Kognitif dan Human Error:** Sifat repetitif dari pemrosesan data CTI meningkatkan risiko kesalahan transkripsi manusia. Penelitian terdokumentasi mengindikasikan bahwa kelelahan dan _burnout_ ditemukan pada lebih dari 70% analis SOC \[20\], yang menurunkan kualitas pengambilan keputusan dalam insiden kritis.
 - **Inefisiensi Alokasi Sumber Daya:** Analis tingkat lanjut sering kali terperangkap dalam tugas-tugas administratif "Level 1", padahal keahlian mereka dibutuhkan untuk analisis "Level 3" (threat hunting dan analisis forensik). Survei prioritasi alert menunjukkan bahwa sebagian besar waktu SOC terbuang untuk triase manual alert berprioritas rendah \[19\].
@@ -34,7 +34,7 @@ Tinjauan literatur komprehensif terhadap publikasi IEEE, ACM, dan jurnal terkait
 
 ## B. Rumusan Masalah
 
-Terlepas dari investasi signifikan pada Threat Intelligence Platform (TIP) dan perangkat keamanan, banyak organisasi masih bergantung pada proses manual untuk mengoperasionalisasikan threat intelligence. Dalam lingkungan operasional salah satu perusahaan penyedia layanan (Managed Security Service Provider) di Indonesia, Indicators of Compromise (IOC) yang bersumber dari TIP Cyfirma-termasuk alamat IP berbahaya, nama domain, hash file, dan indikator teknis lainnya-masih diekstraksi, divalidasi, dan didistribusikan secara manual kepada tim keamanan untuk remediasi.
+Terlepas dari investasi signifikan pada Threat Intelligence Platform (TIP) dan perangkat keamanan, banyak organisasi masih bergantung pada proses manual untuk mengoperasionalisasikan threat intelligence. Dalam lingkungan operasional salah satu perusahaan penyedia layanan (Managed Security Service Provider) di Indonesia, Indicators of Compromise (IOC) yang bersumber dari TIP TIP-termasuk alamat IP berbahaya, nama domain, hash file, dan indikator teknis lainnya-masih diekstraksi, divalidasi, dan didistribusikan secara manual kepada tim keamanan untuk remediasi.
 
 Alur kerja manual ini memperkenalkan beberapa titik kegagalan (points of failure): kesalahan transkripsi manusia yang membahayakan integritas data, penundaan pemrosesan yang memperlebar Window of Exposure, serta kelelahan analis (alert fatigue) akibat tugas repetitif yang mendegradasi efektivitas SOC secara keseluruhan. Latensi inheren dalam transfer data manual menciptakan hambatan (bottleneck) kritis antara deteksi dan remediasi, yang berdampak langsung pada peningkatan Mean Time to Respond (MTTR) dan postur risiko organisasi. Selain itu, ketiadaan format data yang terstandarisasi dan mekanisme validasi otomatis meningkatkan probabilitas false positive mencapai kontrol keamanan produksi, yang berpotensi mengganggu keberlangsungan operasi bisnis yang sah.
 
@@ -50,7 +50,7 @@ Berdasarkan identifikasi masalah dan kesenjangan riset tersebut, penelitian ini 
 
 Penelitian ini bertujuan untuk merancang, mengimplementasikan, dan mengevaluasi arsitektur Cognitive SOC berbasis paradigma Human-On-The-Loop guna mengatasi tantangan operasional yang telah diidentifikasi. Tujuan spesifik dari penelitian ini adalah:
 
-- **Membangun Artefak Cognitive SOC:** Mengembangkan prototipe sistem orkestrasi keamanan berbasis paradigma HOTL menggunakan platform low-code (n8n) yang terintegrasi dengan Cyfirma TIP, subsistem Machine Learning (Random Forest), Wazuh (SIEM), dan Telegram (dasbor monitoring HOTL).
+- **Membangun Artefak Cognitive SOC:** Mengembangkan prototipe sistem orkestrasi keamanan berbasis paradigma HOTL menggunakan platform low-code (n8n) yang terintegrasi dengan TIP TIP, subsistem Machine Learning (Random Forest), Wazuh (SIEM), dan Telegram (dasbor monitoring HOTL).
 - **Mengimplementasikan Hybrid Autonomous AI Agent:** Merancang dan mengimplementasikan Agent Swarm yang mampu melakukan triase ancaman secara otonom dan menghasilkan aturan Intrusion Detection System (IDS) secara dinamis berdasarkan IOC yang diklasifikasikan oleh model Machine Learning.
 - **Mengimplementasikan Adaptive Feedback Loop:** Membangun mekanisme umpan balik adaptif yang memungkinkan koreksi analis SOC memperbarui model Random Forest secara berkelanjutan untuk mencegah concept drift.
 - **Evaluasi Efektivitas Sistem:** Mengukur secara empiris peningkatan efektivitas operasional melalui empat variabel utama: Accuracy, Mean Time to Respond (MTTR), False Positive Rate (FPR), dan F1-Score, dibandingkan dengan baseline proses manual.
@@ -81,9 +81,9 @@ Hasil penelitian diharapkan dapat memberikan dampak operasional langsung yang da
 
 Agar penelitian ini lebih terarah dan fokus, penulis menetapkan batasan masalah sebagai berikut:
 
-- **Sumber Data:** Fokus pada Indicators of Compromise (IOC) jenis IP, Domain, dan Hash File yang bersumber dari Cyfirma TIP melalui REST API.
-- **Teknologi:** Cyfirma (Threat Intelligence Platform), n8n sebagai mesin orkestrasi (Orchestrator) low-code, Python/scikit-learn untuk subsistem Machine Learning (Random Forest), Wazuh (SIEM/Log management), dan Telegram (dasbor monitoring HOTL).
-- **Ruang Lingkup Otoritas AI (Agent Swarm):** Sistem AI beroperasi secara otonom dalam: (a) akuisisi dan normalisasi IOC dari Cyfirma TIP, (b) klasifikasi ancaman menggunakan model Random Forest, (c) triase berdasarkan tingkat kepercayaan (_confidence score_), (d) pembuatan aturan IDS dinamis pada Wazuh secara otomatis, dan (e) pengiriman notifikasi monitoring ke Telegram. Agent Swarm tidak memerlukan persetujuan manusia untuk operasi rutin dalam kategori kepercayaan tinggi.
+- **Sumber Data:** Fokus pada Indicators of Compromise (IOC) jenis IP, Domain, dan Hash File yang bersumber dari TIP TIP melalui REST API.
+- **Teknologi:** TIP (Threat Intelligence Platform), n8n sebagai mesin orkestrasi (Orchestrator) low-code, Python/scikit-learn untuk subsistem Machine Learning (Random Forest), Wazuh (SIEM/Log management), dan Telegram (dasbor monitoring HOTL).
+- **Ruang Lingkup Otoritas AI (Agent Swarm):** Sistem AI beroperasi secara otonom dalam: (a) akuisisi dan normalisasi IOC dari TIP TIP, (b) klasifikasi ancaman menggunakan model Random Forest, (c) triase berdasarkan tingkat kepercayaan (_confidence score_), (d) pembuatan aturan IDS dinamis pada Wazuh secara otomatis, dan (e) pengiriman notifikasi monitoring ke Telegram. Agent Swarm tidak memerlukan persetujuan manusia untuk operasi rutin dalam kategori kepercayaan tinggi.
 - **Ruang Lingkup Otoritas Manusia (SOC Analyst):** Analis SOC berperan sebagai supervisor dalam paradigma HOTL dengan tugas: (a) memantau dasbor Telegram untuk anomali atau _outlier_ yang di-flag sistem, (b) memberikan koreksi atau eskalasi pada kasus borderline atau false positive yang lolos filter, (c) mengintervensi pada insiden berisiko tinggi yang melampaui threshold otorisasi AI, dan (d) mem-validasi pembaruan model sebagai umpan balik pada Adaptive Feedback Loop.
 - **Metrik Evaluasi:** Accuracy, Mean Time to Respond (MTTR), False Positive Rate (FPR), F1-Score (efektivitas sistem), dan System Usability Scale/SUS score (penerimaan pengguna). Analisis forensik endpoint berada di luar cakupan utama.
 - **Lingkungan:** Eksperimen dilakukan dalam lingkungan laboratorium terkontrol (_virtual environment_) yang mensimulasikan infrastruktur SOC perusahaan menengah, bukan pada jaringan produksi aktif.
@@ -134,7 +134,7 @@ Transisi ini didukung oleh mekanisme confidence-based routing: IOC dengan confid
 
 ### Konsep Hybrid Autonomous AI Agent
 
-Arsitektur Hybrid Autonomous AI Agent yang diusulkan terdiri dari Agent Swarm—kumpulan agen berkoordinasi yang masing-masing memiliki spesialisasi fungsi dalam pipeline threat intelligence. Secara operasional, Agent Swarm menjalankan empat tahap utama secara otonom: (1) **Acquisition Agent** mengakuisisi dan menormalisasi IOC dari Cyfirma TIP melalui REST API; (2) **Classification Agent** menjalankan model Random Forest untuk mengklasifikasikan tingkat ancaman setiap IOC berdasarkan fitur yang diekstraksi; (3) **Triage Agent** menentukan tindakan respons berdasarkan confidence score dan kategori ancaman; serta (4) **Enforcement Agent** mengeksekusi pembuatan aturan IDS dinamis pada Wazuh SIEM secara otomatis. Arsitektur hibrida ini menggabungkan ketelitian deterministik dari aturan berbasis heuristik dengan adaptabilitas model Machine Learning, memungkinkan respons yang presisi dan dapat diprediksi \[1\], \[4\].
+Arsitektur Hybrid Autonomous AI Agent yang diusulkan terdiri dari Agent Swarm—kumpulan agen berkoordinasi yang masing-masing memiliki spesialisasi fungsi dalam pipeline threat intelligence. Secara operasional, Agent Swarm menjalankan empat tahap utama secara otonom: (1) **Acquisition Agent** mengakuisisi dan menormalisasi IOC dari TIP TIP melalui REST API; (2) **Classification Agent** menjalankan model Random Forest untuk mengklasifikasikan tingkat ancaman setiap IOC berdasarkan fitur yang diekstraksi; (3) **Triage Agent** menentukan tindakan respons berdasarkan confidence score dan kategori ancaman; serta (4) **Enforcement Agent** mengeksekusi pembuatan aturan IDS dinamis pada Wazuh SIEM secara otomatis. Arsitektur hibrida ini menggabungkan ketelitian deterministik dari aturan berbasis heuristik dengan adaptabilitas model Machine Learning, memungkinkan respons yang presisi dan dapat diprediksi \[1\], \[4\].
 
 ### Adaptive Feedback Loop dan Pencegahan Concept Drift
 
@@ -165,7 +165,7 @@ Sistem Cognitive SOC Architecture yang dibangun terdiri dari komponen-komponen b
 
 | No. | Komponen | Teknologi | Fungsi |
 |-----|----------|-----------|--------|
-| 1 | **Sumber Threat Intelligence (TIP)** | Cyfirma API | Menyediakan feed data IOC (IP, Domain, File Hash) secara *real-time* melalui REST API terautentikasi. |
+| 1 | **Sumber Threat Intelligence (TIP)** | TIP API | Menyediakan feed data IOC (IP, Domain, File Hash) secara *real-time* melalui REST API terautentikasi. |
 | 2 | **Mesin Orkestrasi (Orchestrator)** | n8n (Self-Hosted, Docker) | Hub pusat untuk manajemen alur kerja, penjadwalan, dan integrasi API seluruh komponen. |
 | 3 | **Modul ML Klasifikasi Ancaman** | Python / scikit-learn (Random Forest) | Memproses dan mengklasifikasikan IOC berdasarkan fitur kontekstual; menghasilkan skor risiko dan label kategori ancaman. |
 | 4 | **Sistem Deteksi & Log (SIEM)** | Wazuh Manager (Host Windows 11) | Penyimpanan log insiden, korelasi data (*enrichment*), dan manajemen aturan IDS. |
@@ -176,7 +176,7 @@ Sistem Cognitive SOC Architecture yang dibangun terdiri dari komponen-komponen b
 
 Alur data sistem (ilustrasi direkomendasikan sebagai **Gambar 1** untuk versi final IEEE) berjalan melalui lima tahap sekuensial dan satu jalur umpan balik:
 
-1. **Tahap Akuisisi:** Cyfirma TIP → n8n Orchestrator (REST API polling terjadwal)
+1. **Tahap Akuisisi:** TIP TIP → n8n Orchestrator (REST API polling terjadwal)
 2. **Tahap Fusi & Normalisasi:** n8n Orchestrator → Modul Fusi Data (transformasi IOC ke representasi terstandarisasi, lihat §Modul Fusi Data Multi-Sumber)
 3. **Tahap Analisis:** Modul Fusi Data → Python ML Agent (klasifikasi Random Forest + confidence scoring)
 4. **Tahap Tindakan (fork paralel):**
@@ -189,7 +189,7 @@ Alur data sistem (ilustrasi direkomendasikan sebagai **Gambar 1** untuk versi fi
 
 ### Modul Fusi Data Multi-Sumber (*Multi-Source Log Fusion Module*)
 
-Mengadopsi prinsip arsitektur Layer 1 dari Zhang et al. \[1\], modul ini mentransformasi telemetri heterogen menjadi representasi terstruktur yang siap diproses oleh subsistem klasifikasi ML. Meskipun implementasi saat ini menggunakan sumber tunggal (Cyfirma TIP), arsitektur dirancang secara extensible untuk mendukung fusi multi-sumber di masa mendatang.
+Mengadopsi prinsip arsitektur Layer 1 dari Zhang et al. \[1\], modul ini mentransformasi telemetri heterogen menjadi representasi terstruktur yang siap diproses oleh subsistem klasifikasi ML. Meskipun implementasi saat ini menggunakan sumber tunggal (TIP TIP), arsitektur dirancang secara extensible untuk mendukung fusi multi-sumber di masa mendatang.
 
 **Definisi 1 (Ruang Telemetri).** Misalkan himpunan sumber data $S = \{s_{\text{TIP}}, s_{\text{SIEM}}, s_{\text{endpoint}}\}$ masing-masing menghasilkan aliran event $E_s = \{e_1, e_2, \ldots, e_n\}$ dengan skema heterogen.
 
@@ -220,21 +220,21 @@ Inti dari sistem ini adalah arsitektur **Hybrid Autonomous AI Agent** yang berop
 
 Agent pertama bertanggung jawab atas triase ancaman secara mandiri (*autonomous triage*):
 
-1. **Polling & Normalisasi Data:** Secara periodik melakukan *polling* ke Cyfirma TIP API dan menormalisasi data IOC ke format yang seragam.
+1. **Polling & Normalisasi Data:** Secara periodik melakukan *polling* ke TIP TIP API dan menormalisasi data IOC ke format yang seragam.
 2. **Sumber dan Deskripsi Dataset Pelatihan:** Model Random Forest dilatih menggunakan dataset IOC berlabel yang dikonstruksi dari dua sumber:
-   - **(a) Data historis Cyfirma TIP:** 4.200 sampel IOC berlabel yang dikumpulkan selama 3 bulan sebelum eksperimen. Label kelas diberikan berdasarkan severity rating Cyfirma yang dimapping ke taksonomi empat kelas.
+   - **(a) Data historis TIP TIP:** 4.200 sampel IOC berlabel yang dikumpulkan selama 3 bulan sebelum eksperimen. Label kelas diberikan berdasarkan severity rating TIP yang dimapping ke taksonomi empat kelas.
    - **(b) Dataset CTU-13 (Skenario 1, 2, 9):** 800 sampel tambahan diekstraksi dari dataset flows CTU-13 \[15\]. Karena CTU-13 merupakan dataset network flow (bukan IOC), transformasi dilakukan melalui agregasi flow-level features (IP tujuan, port, durasi koneksi, bytes transferred) ke IOC-level features sesuai skema TABEL II. Tiga skenario dipilih karena mencakup variasi botnet (Neris, Rbot, Murlo) yang menghasilkan pola IOC berbeda.
    - **Total dataset:** 5.000 sampel (4.200 + 800). Distribusi kelas: `Low` 2.250 (45%), `Medium` 1.500 (30%), `High` 900 (18%), `Critical` 350 (7%). Untuk mengatasi class imbalance, digunakan parameter `class_weight='balanced'` pada scikit-learn RandomForestClassifier, yang secara otomatis menyesuaikan bobot setiap kelas berbanding terbalik dengan frekuensinya. Dataset dibagi 80:20 (4.000 training : 1.000 validasi) menggunakan stratified split untuk mempertahankan proporsi kelas.
 
-   **Protokol Pelabelan Ground Truth.** Label kelas ancaman diperoleh melalui fungsi pemetaan deterministik $\mathcal{L}: [0, 100] \rightarrow \mathcal{C}$ yang mentransformasi skor severity Cyfirma (skala 0–100) ke taksonomi empat kelas:
+   **Protokol Pelabelan Ground Truth.** Label kelas ancaman diperoleh melalui fungsi pemetaan deterministik $\mathcal{L}: [0, 100] \rightarrow \mathcal{C}$ yang mentransformasi skor severity TIP (skala 0–100) ke taksonomi empat kelas:
 
    $$\mathcal{L}(s) = \begin{cases} \text{Low} & \text{jika } 0 \leq s \leq 25 \\ \text{Medium} & \text{jika } 25 < s \leq 55 \\ \text{High} & \text{jika } 55 < s \leq 80 \\ \text{Critical} & \text{jika } s > 80 \end{cases}$$
 
-   Batas-batas interval (25, 55, 80) diturunkan dari analisis distribusi kuartil pada 4.200 sampel historis Cyfirma dan divalidasi melalui konsultasi dengan satu analis SOC senior (pengalaman >5 tahun). Distribusi non-equidistant ini mencerminkan proporsi empiris ancaman di mana mayoritas IOC bersifat Low/Medium, konsisten dengan distribusi skewed yang umum diamati dalam operasi SOC \[19\].
+   Batas-batas interval (25, 55, 80) diturunkan dari analisis distribusi kuartil pada 4.200 sampel historis TIP dan divalidasi melalui konsultasi dengan satu analis SOC senior (pengalaman >5 tahun). Distribusi non-equidistant ini mencerminkan proporsi empiris ancaman di mana mayoritas IOC bersifat Low/Medium, konsisten dengan distribusi skewed yang umum diamati dalam operasi SOC \[19\].
 
    **Prosedur Imputasi Fitur CTU-13.** Karena dataset CTU-13 \[15\] merupakan dataset network flow yang tidak mengandung fitur IOC-level secara native, prosedur transformasi berikut diterapkan: (a) alamat IP tujuan dari flow diekstraksi sebagai IOC; (b) fitur `tip_reputation_score` diimputasi menggunakan lookup terhadap basis data reputasi VirusTotal yang diarsipkan pada periode dataset (2011–2013), dengan nilai default 0.5 untuk IP yang tidak ditemukan; (c) `geolocation_risk` diperoleh melalui GeoIP lookup pada ASN registry; (d) `asn_reputation` dihitung berdasarkan proporsi flow malicious per ASN dalam dataset CTU-13 itu sendiri; (e) `feed_frequency`, `first_seen_age_days`, `source_diversity_count`, dan `active_days_count` diimputasi dari agregasi statistik flow-level (jumlah koneksi, durasi aktif, jumlah sumber unik). Label kelas untuk sampel CTU-13 ditetapkan berdasarkan ground truth skenario: flow yang ditandai *Botnet* diklasifikasikan sebagai `High` atau `Critical` (berdasarkan volume dan durasi), sedangkan flow *Normal* dan *Background* diklasifikasikan sebagai `Low`.
 
-   **Keterbatasan Pelabelan:** Seluruh pelabelan dilakukan oleh satu orang labeler (penulis), sehingga inter-rater reliability (e.g., Cohen's κ) tidak dapat dilaporkan. Keterbatasan ini diakui secara eksplisit dan dimitigasi melalui: (1) penggunaan fungsi pemetaan deterministik $\mathcal{L}$ yang mengeliminasi subjektivitas pada data Cyfirma, dan (2) penggunaan ground truth bawaan CTU-13 untuk sampel network flow. Namun, keputusan transformasi fitur dan batas kelas tetap bergantung pada penilaian tunggal, yang merupakan single point of failure untuk validitas label.
+   **Keterbatasan Pelabelan:** Seluruh pelabelan dilakukan oleh satu orang labeler (penulis), sehingga inter-rater reliability (e.g., Cohen's κ) tidak dapat dilaporkan. Keterbatasan ini diakui secara eksplisit dan dimitigasi melalui: (1) penggunaan fungsi pemetaan deterministik $\mathcal{L}$ yang mengeliminasi subjektivitas pada data TIP, dan (2) penggunaan ground truth bawaan CTU-13 untuk sampel network flow. Namun, keputusan transformasi fitur dan batas kelas tetap bergantung pada penilaian tunggal, yang merupakan single point of failure untuk validitas label.
 
 3. **Feature Engineering:** Mengekstraksi fitur kontekstual dari setiap IOC. Vektor fitur terdiri dari 9 dimensi sebagai berikut:
 
@@ -476,8 +476,8 @@ Penelitian ini mengakui beberapa ancaman terhadap validitas yang perlu dipertimb
 
 - **Validitas Internal:** Desain eksperimen sekuensial (7+7 hari) memperkenalkan potensi *confounding variables* berupa perubahan threat landscape antar periode. Mitigasi dilakukan melalui pencatatan volume IOC harian dan analisis kovariat. Selain itu, *learning effect* pada analis yang semakin familiar dengan sistem di minggu kedua dapat mempengaruhi hasil MTTR.
 - **Validitas Eksternal:** Lingkungan laboratorium dengan Virtual Machine tidak sepenuhnya merepresentasikan kompleksitas SOC produksi enterprise. Volume IOC di lingkungan lab (~50-100 IOC/hari) lebih rendah dibandingkan SOC produksi skala besar (~500-1.000 IOC/hari). Temuan mungkin tidak langsung berlaku pada organisasi dengan skala dan kompleksitas jaringan yang berbeda.
-- **Validitas Konstruk:** Penggunaan 500 IOC tiruan (dummy data) pada skenario stress test mungkin tidak mencerminkan distribusi dan karakteristik IOC pada lingkungan ancaman nyata. Distribusi kelas IOC tiruan mengikuti distribusi dataset pelatihan (Low 45%, Medium 30%, High 18%, Critical 7%); perlu diakui bahwa distribusi yang seragam melintasi semua kelas akan memberikan evaluasi yang lebih ketat terhadap performa per-kelas. Dataset pelatihan dari Cyfirma historical data dapat memiliki bias terhadap jenis ancaman tertentu.
-- **Validitas Konstruk (Multi-Sumber):** Arsitektur dirancang untuk fusi multi-sumber (Persamaan 1–2), namun hanya instansiasi sumber tunggal (Cyfirma TIP) yang divalidasi secara eksperimental. Klaim arsitektural tentang extensibility multi-sumber belum diverifikasi secara empiris.
+- **Validitas Konstruk:** Penggunaan 500 IOC tiruan (dummy data) pada skenario stress test mungkin tidak mencerminkan distribusi dan karakteristik IOC pada lingkungan ancaman nyata. Distribusi kelas IOC tiruan mengikuti distribusi dataset pelatihan (Low 45%, Medium 30%, High 18%, Critical 7%); perlu diakui bahwa distribusi yang seragam melintasi semua kelas akan memberikan evaluasi yang lebih ketat terhadap performa per-kelas. Dataset pelatihan dari TIP historical data dapat memiliki bias terhadap jenis ancaman tertentu.
+- **Validitas Konstruk (Multi-Sumber):** Arsitektur dirancang untuk fusi multi-sumber (Persamaan 1–2), namun hanya instansiasi sumber tunggal (TIP TIP) yang divalidasi secara eksperimental. Klaim arsitektural tentang extensibility multi-sumber belum diverifikasi secara empiris.
 
 ## Keterbatasan dan Pekerjaan Mendatang
 
