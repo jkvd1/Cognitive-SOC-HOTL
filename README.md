@@ -11,11 +11,15 @@ This repository contains the complete dataset, configurations, and Jupyter Noteb
 ## 📁 Repository Structure
 * `Data/`
   * `IOC.json` - 4,200 real TIP IOCs (STIX format).
-  * `hasil_kuantitatif_harian.csv` - Daily quantitative metrics from the 14-day experiment.
   * `research_filtered_iocs.json` - Complete dataset of 960 indicators processed.
+  * `hasil_kuantitatif_harian.csv` - Daily quantitative metrics from the 14-day experiment.
   * `wazuh_rules_generated.xml` - 122 autonomously synthesized Wazuh rules.
-* `Docs/` - Academic proposal documents, peer review reports, and results.
-* `src/` - Orchestration source code, local agents, and figure plot generators.
+  * `ioc_rf_model.pkl` - Trained Random Forest classifier.
+  * `label_encoder.pkl` - Label encoder for classification classes.
+  * `n8n_workflows_cognitive_soc.json` - SOAR orchestrator workflows.
+  * `n8n_etl_node.js` - ETL script for data transformation.
+  * `filter_and_export_research_data.py` & `.js` - Data exporting scripts.
+  * `local_telegram_bot_handler.py` - Script for HOTL Telegram bot interactions.
 * `RandomForest.ipynb` - Entire machine learning pipeline (preprocessing, training, evaluation, plotting).
 * `README.md` - Project documentation.
 
