@@ -2,11 +2,16 @@
 Telegram Bot Handler for Human-On-The-Loop (HOTL) Validation and Feedback.
 Listens to callback buttons from n8n-escalated alerts to confirm, reject, or correct threat classification labels, inserting analyst decisions into SQLite feedback buffer.
 """
+import os
 import sqlite3
 import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-API_TOKEN = '7123456789:ABCdefGhIJKlmNoPQRstUVwxyZ'
+# Gunakan environment variable agar token tidak terekspos di kode
+API_TOKEN = os.getenv('TELEGRAM_API_TOKEN', 'YOUR_API_TOKEN_HERE')
+if API_TOKEN == 'YOUR_API_TOKEN_HERE':
+    print("WARNING: TELEGRAM_API_TOKEN environment variable not set.")
+
 bot = telebot.TeleBot(API_TOKEN)
 DB_PATH = r'c:\Users\ACER\Downloads\Skripsi\data\cognitive_soc_logs.db'
 
