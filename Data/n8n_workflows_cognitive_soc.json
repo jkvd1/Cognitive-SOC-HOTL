@@ -64,7 +64,7 @@
         "bodyParametersUi": [
           {
             "name": "rule_xml",
-            "value": "=<rule id=\"100099\" level=\"7\"><field name=\"srcip\">{{$json.ioc_value}}</field><description>Cognitive SOC Blocked Malicious IP</description></rule>"
+            "value": "=<rule id=\"100099\" level=\"7\">\n<if_group>syslog</if_group><field name=\"srcip\">{{$json.ioc_value}}</field><description>Cognitive SOC Blocked Malicious IP</description></rule>"
           }
         ]
       },

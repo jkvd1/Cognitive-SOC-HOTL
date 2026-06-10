@@ -2,6 +2,7 @@
 <group name="local,cognitive_soc,">
    <!-- Generated autonomously by Cognitive SOC Agent Swarm (HOTL) using TIP IOCs -->
    <rule id="100001" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">104.152.52.103</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 104.152.52.103</description>
       <options>no_email_alert</options>
@@ -10,6 +11,7 @@
       </mitre>
    </rule>
    <rule id="100002" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">218.149.228.137</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 218.149.228.137</description>
       <options>no_email_alert</options>
@@ -18,6 +20,7 @@
       </mitre>
    </rule>
    <rule id="100003" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">103.108.130.39</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 103.108.130.39</description>
       <options>no_email_alert</options>
@@ -26,6 +29,7 @@
       </mitre>
    </rule>
    <rule id="100004" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">124.158.184.186</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 124.158.184.186</description>
       <options>no_email_alert</options>
@@ -34,6 +38,7 @@
       </mitre>
    </rule>
    <rule id="100005" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">34.85.220.69</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 34.85.220.69</description>
       <options>no_email_alert</options>
@@ -42,6 +47,7 @@
       </mitre>
    </rule>
    <rule id="100006" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">180.222.114.12</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 180.222.114.12</description>
       <options>no_email_alert</options>
@@ -50,6 +56,7 @@
       </mitre>
    </rule>
    <rule id="100007" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">36.85.228.129</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 36.85.228.129</description>
       <options>no_email_alert</options>
@@ -58,6 +65,7 @@
       </mitre>
    </rule>
    <rule id="100008" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">104.152.52.228</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 104.152.52.228</description>
       <options>no_email_alert</options>
@@ -66,6 +74,7 @@
       </mitre>
    </rule>
    <rule id="100009" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '98c65f9d5d4325f4f3a3d1becc731d59c9ddd9514260bfbb33239b4ba7e77ab9'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '98c65f9d5d4325f4f3a3d1becc731d59c9ddd9514260bfbb33239b4ba7e77ab9'</description>
       <options>no_email_alert</options>
@@ -74,6 +83,7 @@
       </mitre>
    </rule>
    <rule id="100010" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">180.232.181.55</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 180.232.181.55</description>
       <options>no_email_alert</options>
@@ -82,6 +92,7 @@
       </mitre>
    </rule>
    <rule id="100011" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '75db696f5b9f92af89288517279b8e9436ebffbcad2d42975d9f7f8ff39bd723'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '75db696f5b9f92af89288517279b8e9436ebffbcad2d42975d9f7f8ff39bd723'</description>
       <options>no_email_alert</options>
@@ -90,6 +101,7 @@
       </mitre>
    </rule>
    <rule id="100012" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">150.228.105.199</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 150.228.105.199</description>
       <options>no_email_alert</options>
@@ -98,6 +110,7 @@
       </mitre>
    </rule>
    <rule id="100013" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">119.111.176.39</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 119.111.176.39</description>
       <options>no_email_alert</options>
@@ -106,6 +119,7 @@
       </mitre>
    </rule>
    <rule id="100014" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '5cb94074b44f76d44e57ea775f940a76f36c4c1b44c7d0c2f2dbe090421b71ac'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '5cb94074b44f76d44e57ea775f940a76f36c4c1b44c7d0c2f2dbe090421b71ac'</description>
       <options>no_email_alert</options>
@@ -114,6 +128,7 @@
       </mitre>
    </rule>
    <rule id="100015" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">218.149.170.76</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 218.149.170.76</description>
       <options>no_email_alert</options>
@@ -122,6 +137,7 @@
       </mitre>
    </rule>
    <rule id="100016" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash 'c4d0246e2fb71510a56770505743f934a8de4f2c1af5aeb18137cb7bd7bca284'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash 'c4d0246e2fb71510a56770505743f934a8de4f2c1af5aeb18137cb7bd7bca284'</description>
       <options>no_email_alert</options>
@@ -130,6 +146,7 @@
       </mitre>
    </rule>
    <rule id="100017" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">198.235.24.145</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 198.235.24.145</description>
       <options>no_email_alert</options>
@@ -138,6 +155,7 @@
       </mitre>
    </rule>
    <rule id="100018" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">196.207.222.122</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 196.207.222.122</description>
       <options>no_email_alert</options>
@@ -146,6 +164,7 @@
       </mitre>
    </rule>
    <rule id="100019" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">210.99.124.119</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 210.99.124.119</description>
       <options>no_email_alert</options>
@@ -154,6 +173,7 @@
       </mitre>
    </rule>
    <rule id="100020" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash 'b7e730987afe1647dea14c5c3b42cb432db0e46e504fa0acf57f05ea9a49a36e'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash 'b7e730987afe1647dea14c5c3b42cb432db0e46e504fa0acf57f05ea9a49a36e'</description>
       <options>no_email_alert</options>
@@ -162,6 +182,7 @@
       </mitre>
    </rule>
    <rule id="100021" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">155.133.22.163</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 155.133.22.163</description>
       <options>no_email_alert</options>
@@ -170,6 +191,7 @@
       </mitre>
    </rule>
    <rule id="100022" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">106.0.128.225</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 106.0.128.225</description>
       <options>no_email_alert</options>
@@ -178,6 +200,7 @@
       </mitre>
    </rule>
    <rule id="100023" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">218.149.228.175</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 218.149.228.175</description>
       <options>no_email_alert</options>
@@ -186,6 +209,7 @@
       </mitre>
    </rule>
    <rule id="100024" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">20.119.75.60</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 20.119.75.60</description>
       <options>no_email_alert</options>
@@ -194,6 +218,7 @@
       </mitre>
    </rule>
    <rule id="100025" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash 'd39d6f4d48ee5525105411a3c21c4c1d81d47817eea84737d3264b2105d2a25e'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash 'd39d6f4d48ee5525105411a3c21c4c1d81d47817eea84737d3264b2105d2a25e'</description>
       <options>no_email_alert</options>
@@ -202,6 +227,7 @@
       </mitre>
    </rule>
    <rule id="100026" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">202.65.225.189</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 202.65.225.189</description>
       <options>no_email_alert</options>
@@ -210,6 +236,7 @@
       </mitre>
    </rule>
    <rule id="100027" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash 'eb97e52739b530945285db2fab09d7c5792ba8fc83781fb842606d9c32d71e43'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash 'eb97e52739b530945285db2fab09d7c5792ba8fc83781fb842606d9c32d71e43'</description>
       <options>no_email_alert</options>
@@ -218,6 +245,7 @@
       </mitre>
    </rule>
    <rule id="100028" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash 'a5224f6ffc07613745b59f933dfd9c80ada816ac0b25b76369ede259cb247b6a'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash 'a5224f6ffc07613745b59f933dfd9c80ada816ac0b25b76369ede259cb247b6a'</description>
       <options>no_email_alert</options>
@@ -226,6 +254,7 @@
       </mitre>
    </rule>
    <rule id="100029" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">34.64.230.57</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 34.64.230.57</description>
       <options>no_email_alert</options>
@@ -234,6 +263,7 @@
       </mitre>
    </rule>
    <rule id="100030" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">216.180.228.62</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 216.180.228.62</description>
       <options>no_email_alert</options>
@@ -242,6 +272,7 @@
       </mitre>
    </rule>
    <rule id="100031" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">41.111.242.66</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 41.111.242.66</description>
       <options>no_email_alert</options>
@@ -250,6 +281,7 @@
       </mitre>
    </rule>
    <rule id="100032" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">58.69.179.241</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 58.69.179.241</description>
       <options>no_email_alert</options>
@@ -258,6 +290,7 @@
       </mitre>
    </rule>
    <rule id="100033" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash 'dd8f5c433973776f660a04d085c759278f25ee0297bd05d381bc06b114bdedcb'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash 'dd8f5c433973776f660a04d085c759278f25ee0297bd05d381bc06b114bdedcb'</description>
       <options>no_email_alert</options>
@@ -266,6 +299,7 @@
       </mitre>
    </rule>
    <rule id="100034" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">197.218.126.157</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 197.218.126.157</description>
       <options>no_email_alert</options>
@@ -274,6 +308,7 @@
       </mitre>
    </rule>
    <rule id="100035" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">64.236.133.176</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 64.236.133.176</description>
       <options>no_email_alert</options>
@@ -282,6 +317,7 @@
       </mitre>
    </rule>
    <rule id="100036" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">176.65.139.126</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 176.65.139.126</description>
       <options>no_email_alert</options>
@@ -290,6 +326,7 @@
       </mitre>
    </rule>
    <rule id="100037" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">94.141.86.54</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 94.141.86.54</description>
       <options>no_email_alert</options>
@@ -298,6 +335,7 @@
       </mitre>
    </rule>
    <rule id="100038" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">129.222.187.122</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 129.222.187.122</description>
       <options>no_email_alert</options>
@@ -306,6 +344,7 @@
       </mitre>
    </rule>
    <rule id="100039" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash 'ba2f49bfbe7c0b0a134e4c273dcd872e85f39375ec460d2e211c0ece8af11e69'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash 'ba2f49bfbe7c0b0a134e4c273dcd872e85f39375ec460d2e211c0ece8af11e69'</description>
       <options>no_email_alert</options>
@@ -314,6 +353,7 @@
       </mitre>
    </rule>
    <rule id="100040" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">20.163.60.206</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 20.163.60.206</description>
       <options>no_email_alert</options>
@@ -322,6 +362,7 @@
       </mitre>
    </rule>
    <rule id="100041" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">185.106.31.134</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 185.106.31.134</description>
       <options>no_email_alert</options>
@@ -330,6 +371,7 @@
       </mitre>
    </rule>
    <rule id="100042" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">164.92.238.219</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 164.92.238.219</description>
       <options>no_email_alert</options>
@@ -338,6 +380,7 @@
       </mitre>
    </rule>
    <rule id="100043" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">141.226.230.48</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 141.226.230.48</description>
       <options>no_email_alert</options>
@@ -346,6 +389,7 @@
       </mitre>
    </rule>
    <rule id="100044" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">111.94.56.236</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 111.94.56.236</description>
       <options>no_email_alert</options>
@@ -354,6 +398,7 @@
       </mitre>
    </rule>
    <rule id="100045" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '992ecfb13f83690447406c4b70d2fe9e02e6f23db7053972da10044d2419daf9'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '992ecfb13f83690447406c4b70d2fe9e02e6f23db7053972da10044d2419daf9'</description>
       <options>no_email_alert</options>
@@ -362,6 +407,7 @@
       </mitre>
    </rule>
    <rule id="100046" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">47.251.168.209</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 47.251.168.209</description>
       <options>no_email_alert</options>
@@ -370,6 +416,7 @@
       </mitre>
    </rule>
    <rule id="100047" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">34.19.154.6</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 34.19.154.6</description>
       <options>no_email_alert</options>
@@ -378,6 +425,7 @@
       </mitre>
    </rule>
    <rule id="100048" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '1eacf153911174af73a38191b4271c991a37fa0063913a8ba3ce8fd10670bf09'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '1eacf153911174af73a38191b4271c991a37fa0063913a8ba3ce8fd10670bf09'</description>
       <options>no_email_alert</options>
@@ -386,6 +434,7 @@
       </mitre>
    </rule>
    <rule id="100049" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '8591e35ab8bf0a34b8c7baccaab818b1df9130bb16f4ec050ee154fdabc9439e'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '8591e35ab8bf0a34b8c7baccaab818b1df9130bb16f4ec050ee154fdabc9439e'</description>
       <options>no_email_alert</options>
@@ -394,6 +443,7 @@
       </mitre>
    </rule>
    <rule id="100050" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">221.164.237.124</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 221.164.237.124</description>
       <options>no_email_alert</options>
@@ -402,6 +452,7 @@
       </mitre>
    </rule>
    <rule id="100051" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '551f34671b360439eb21c03a838a0ca59348b808ca68f893e7e4e691f30dd1de'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '551f34671b360439eb21c03a838a0ca59348b808ca68f893e7e4e691f30dd1de'</description>
       <options>no_email_alert</options>
@@ -410,6 +461,7 @@
       </mitre>
    </rule>
    <rule id="100052" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">71.193.15.134</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 71.193.15.134</description>
       <options>no_email_alert</options>
@@ -418,6 +470,7 @@
       </mitre>
    </rule>
    <rule id="100053" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '9d455ff453c269d03358fe1d10550f6a1b1fbe3f39757df2f85a955a05990de2'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '9d455ff453c269d03358fe1d10550f6a1b1fbe3f39757df2f85a955a05990de2'</description>
       <options>no_email_alert</options>
@@ -426,6 +479,7 @@
       </mitre>
    </rule>
    <rule id="100054" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '7b7e7ef365fb79ba95e27d96c4084b93fc84b05b34bf9c42bd46029fa3dc9dd9'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '7b7e7ef365fb79ba95e27d96c4084b93fc84b05b34bf9c42bd46029fa3dc9dd9'</description>
       <options>no_email_alert</options>
@@ -434,6 +488,7 @@
       </mitre>
    </rule>
    <rule id="100055" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">181.94.224.68</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 181.94.224.68</description>
       <options>no_email_alert</options>
@@ -442,6 +497,7 @@
       </mitre>
    </rule>
    <rule id="100056" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '37c02fed5dcc9834a85ee7beb813aff4cd5578f213d93a0063c970975290f689'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '37c02fed5dcc9834a85ee7beb813aff4cd5578f213d93a0063c970975290f689'</description>
       <options>no_email_alert</options>
@@ -450,6 +506,7 @@
       </mitre>
    </rule>
    <rule id="100057" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">186.158.200.60</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 186.158.200.60</description>
       <options>no_email_alert</options>
@@ -458,6 +515,7 @@
       </mitre>
    </rule>
    <rule id="100058" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">153.117.6.25</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 153.117.6.25</description>
       <options>no_email_alert</options>
@@ -466,6 +524,7 @@
       </mitre>
    </rule>
    <rule id="100059" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">34.95.207.129</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 34.95.207.129</description>
       <options>no_email_alert</options>
@@ -474,6 +533,7 @@
       </mitre>
    </rule>
    <rule id="100060" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '3297d7ebe4749e765cf4e62a555bf7551f019e9e13345037d691433b3f8b27ca'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '3297d7ebe4749e765cf4e62a555bf7551f019e9e13345037d691433b3f8b27ca'</description>
       <options>no_email_alert</options>
@@ -482,6 +542,7 @@
       </mitre>
    </rule>
    <rule id="100061" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">221.121.107.142</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 221.121.107.142</description>
       <options>no_email_alert</options>
@@ -490,6 +551,7 @@
       </mitre>
    </rule>
    <rule id="100062" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '2aa50653b030f23aba70ba19c0ecf35167f6c96e1fc413c03d9787330e03dd47'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '2aa50653b030f23aba70ba19c0ecf35167f6c96e1fc413c03d9787330e03dd47'</description>
       <options>no_email_alert</options>
@@ -498,6 +560,7 @@
       </mitre>
    </rule>
    <rule id="100063" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">47.84.140.0</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 47.84.140.0</description>
       <options>no_email_alert</options>
@@ -506,6 +569,7 @@
       </mitre>
    </rule>
    <rule id="100064" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">208.91.197.27</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 208.91.197.27</description>
       <options>no_email_alert</options>
@@ -514,6 +578,7 @@
       </mitre>
    </rule>
    <rule id="100065" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '7197724c39ed109ce58bee9c275e5723fc679aa3b699b34ea2f598bbcaadf97b'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '7197724c39ed109ce58bee9c275e5723fc679aa3b699b34ea2f598bbcaadf97b'</description>
       <options>no_email_alert</options>
@@ -522,6 +587,7 @@
       </mitre>
    </rule>
    <rule id="100066" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">141.8.195.65</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 141.8.195.65</description>
       <options>no_email_alert</options>
@@ -530,6 +596,7 @@
       </mitre>
    </rule>
    <rule id="100067" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '8e1bfc25955ded1df5f6a7702709580cd21a73ffc504b5687cb7ba90d481b308'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '8e1bfc25955ded1df5f6a7702709580cd21a73ffc504b5687cb7ba90d481b308'</description>
       <options>no_email_alert</options>
@@ -538,6 +605,7 @@
       </mitre>
    </rule>
    <rule id="100068" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '560221066ecb41ae74c49bf9dfe473fdc21fd31a9306deaa89f678cf70a1f1ea'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '560221066ecb41ae74c49bf9dfe473fdc21fd31a9306deaa89f678cf70a1f1ea'</description>
       <options>no_email_alert</options>
@@ -546,6 +614,7 @@
       </mitre>
    </rule>
    <rule id="100069" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash 'e9cb6dc31cee0e07a78e7f21ba1d1a61d55d6b0dbe4b2eb719aceb5837358a56'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash 'e9cb6dc31cee0e07a78e7f21ba1d1a61d55d6b0dbe4b2eb719aceb5837358a56'</description>
       <options>no_email_alert</options>
@@ -554,6 +623,7 @@
       </mitre>
    </rule>
    <rule id="100070" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">124.253.181.176</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 124.253.181.176</description>
       <options>no_email_alert</options>
@@ -562,6 +632,7 @@
       </mitre>
    </rule>
    <rule id="100071" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">34.19.176.97</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 34.19.176.97</description>
       <options>no_email_alert</options>
@@ -570,6 +641,7 @@
       </mitre>
    </rule>
    <rule id="100072" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '61b2c5cffbe39cd0828143d3a14b83d5de28581daeffef84180c1c3526a2f733'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '61b2c5cffbe39cd0828143d3a14b83d5de28581daeffef84180c1c3526a2f733'</description>
       <options>no_email_alert</options>
@@ -578,6 +650,7 @@
       </mitre>
    </rule>
    <rule id="100073" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">203.17.87.52</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 203.17.87.52</description>
       <options>no_email_alert</options>
@@ -586,6 +659,7 @@
       </mitre>
    </rule>
    <rule id="100074" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">23.108.86.144</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 23.108.86.144</description>
       <options>no_email_alert</options>
@@ -594,6 +668,7 @@
       </mitre>
    </rule>
    <rule id="100075" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">34.57.71.179</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 34.57.71.179</description>
       <options>no_email_alert</options>
@@ -602,6 +677,7 @@
       </mitre>
    </rule>
    <rule id="100076" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">202.59.207.88</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 202.59.207.88</description>
       <options>no_email_alert</options>
@@ -610,6 +686,7 @@
       </mitre>
    </rule>
    <rule id="100077" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">190.212.210.25</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 190.212.210.25</description>
       <options>no_email_alert</options>
@@ -618,6 +695,7 @@
       </mitre>
    </rule>
    <rule id="100078" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">65.49.20.76</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 65.49.20.76</description>
       <options>no_email_alert</options>
@@ -626,6 +704,7 @@
       </mitre>
    </rule>
    <rule id="100079" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">178.153.240.77</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 178.153.240.77</description>
       <options>no_email_alert</options>
@@ -634,6 +713,7 @@
       </mitre>
    </rule>
    <rule id="100080" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">69.5.169.139</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 69.5.169.139</description>
       <options>no_email_alert</options>
@@ -642,6 +722,7 @@
       </mitre>
    </rule>
    <rule id="100081" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">157.230.154.143</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 157.230.154.143</description>
       <options>no_email_alert</options>
@@ -650,6 +731,7 @@
       </mitre>
    </rule>
    <rule id="100082" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">45.226.230.244</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 45.226.230.244</description>
       <options>no_email_alert</options>
@@ -658,6 +740,7 @@
       </mitre>
    </rule>
    <rule id="100083" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">34.38.193.142</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 34.38.193.142</description>
       <options>no_email_alert</options>
@@ -666,6 +749,7 @@
       </mitre>
    </rule>
    <rule id="100084" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash 'b6df1455f89cab5a02d7f21a02b3f52bf2d982f13c7d2ce53d2a22532776326e'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash 'b6df1455f89cab5a02d7f21a02b3f52bf2d982f13c7d2ce53d2a22532776326e'</description>
       <options>no_email_alert</options>
@@ -674,6 +758,7 @@
       </mitre>
    </rule>
    <rule id="100085" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">210.1.97.202</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 210.1.97.202</description>
       <options>no_email_alert</options>
@@ -682,6 +767,7 @@
       </mitre>
    </rule>
    <rule id="100086" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">150.228.187.129</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 150.228.187.129</description>
       <options>no_email_alert</options>
@@ -690,6 +776,7 @@
       </mitre>
    </rule>
    <rule id="100087" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">223.206.7.211</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 223.206.7.211</description>
       <options>no_email_alert</options>
@@ -698,6 +785,7 @@
       </mitre>
    </rule>
    <rule id="100088" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '9b95c9bdec65dc8ff569912ab90387cb7649ac5056257e337f6dc5650c43eddb'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '9b95c9bdec65dc8ff569912ab90387cb7649ac5056257e337f6dc5650c43eddb'</description>
       <options>no_email_alert</options>
@@ -706,6 +794,7 @@
       </mitre>
    </rule>
    <rule id="100089" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">198.235.24.184</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 198.235.24.184</description>
       <options>no_email_alert</options>
@@ -714,6 +803,7 @@
       </mitre>
    </rule>
    <rule id="100090" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">34.11.200.210</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 34.11.200.210</description>
       <options>no_email_alert</options>
@@ -722,6 +812,7 @@
       </mitre>
    </rule>
    <rule id="100091" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash 'a65cbba99dd48d6ed4989021b94477bea3b2b8d457b6c22e3457b98d375796ba'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash 'a65cbba99dd48d6ed4989021b94477bea3b2b8d457b6c22e3457b98d375796ba'</description>
       <options>no_email_alert</options>
@@ -730,6 +821,7 @@
       </mitre>
    </rule>
    <rule id="100092" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">124.83.99.212</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 124.83.99.212</description>
       <options>no_email_alert</options>
@@ -738,6 +830,7 @@
       </mitre>
    </rule>
    <rule id="100093" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">64.89.162.78</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 64.89.162.78</description>
       <options>no_email_alert</options>
@@ -746,6 +839,7 @@
       </mitre>
    </rule>
    <rule id="100094" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">90.113.186.50</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 90.113.186.50</description>
       <options>no_email_alert</options>
@@ -754,6 +848,7 @@
       </mitre>
    </rule>
    <rule id="100095" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash 'ed9aed05a55449079a967ccbc1bcd20ff6fa67629c5545619a11638d5d06dcfd'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash 'ed9aed05a55449079a967ccbc1bcd20ff6fa67629c5545619a11638d5d06dcfd'</description>
       <options>no_email_alert</options>
@@ -762,6 +857,7 @@
       </mitre>
    </rule>
    <rule id="100096" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">172.233.41.45</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 172.233.41.45</description>
       <options>no_email_alert</options>
@@ -770,6 +866,7 @@
       </mitre>
    </rule>
    <rule id="100097" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">110.138.53.217</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 110.138.53.217</description>
       <options>no_email_alert</options>
@@ -778,6 +875,7 @@
       </mitre>
    </rule>
    <rule id="100098" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash 'cb03f89867984dd2092321c60e42dda70c36525599d0cdebd6434305dc97bbe8'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash 'cb03f89867984dd2092321c60e42dda70c36525599d0cdebd6434305dc97bbe8'</description>
       <options>no_email_alert</options>
@@ -786,6 +884,7 @@
       </mitre>
    </rule>
    <rule id="100099" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">198.235.24.227</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 198.235.24.227</description>
       <options>no_email_alert</options>
@@ -794,6 +893,7 @@
       </mitre>
    </rule>
    <rule id="100100" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">164.68.110.178</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 164.68.110.178</description>
       <options>no_email_alert</options>
@@ -802,6 +902,7 @@
       </mitre>
    </rule>
    <rule id="100101" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">64.176.55.202</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 64.176.55.202</description>
       <options>no_email_alert</options>
@@ -810,6 +911,7 @@
       </mitre>
    </rule>
    <rule id="100102" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">211.223.179.243</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 211.223.179.243</description>
       <options>no_email_alert</options>
@@ -818,6 +920,7 @@
       </mitre>
    </rule>
    <rule id="100103" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">117.102.4.162</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 117.102.4.162</description>
       <options>no_email_alert</options>
@@ -826,6 +929,7 @@
       </mitre>
    </rule>
    <rule id="100104" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">66.132.195.115</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 66.132.195.115</description>
       <options>no_email_alert</options>
@@ -834,6 +938,7 @@
       </mitre>
    </rule>
    <rule id="100105" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">58.69.214.98</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 58.69.214.98</description>
       <options>no_email_alert</options>
@@ -842,6 +947,7 @@
       </mitre>
    </rule>
    <rule id="100106" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">65.49.1.40</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 65.49.1.40</description>
       <options>no_email_alert</options>
@@ -850,6 +956,7 @@
       </mitre>
    </rule>
    <rule id="100107" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash 'a9288d5e379402f9d985a673af48d58c2f54b57158ca2dbd22b2cdc71663a275'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash 'a9288d5e379402f9d985a673af48d58c2f54b57158ca2dbd22b2cdc71663a275'</description>
       <options>no_email_alert</options>
@@ -858,6 +965,7 @@
       </mitre>
    </rule>
    <rule id="100108" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '49d284fc95b207f80481739a6855a859198cb582c5e9051873d017238cc33809'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '49d284fc95b207f80481739a6855a859198cb582c5e9051873d017238cc33809'</description>
       <options>no_email_alert</options>
@@ -866,6 +974,7 @@
       </mitre>
    </rule>
    <rule id="100109" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">43.240.55.125</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 43.240.55.125</description>
       <options>no_email_alert</options>
@@ -874,6 +983,7 @@
       </mitre>
    </rule>
    <rule id="100110" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">60.209.116.235</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 60.209.116.235</description>
       <options>no_email_alert</options>
@@ -882,6 +992,7 @@
       </mitre>
    </rule>
    <rule id="100111" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash '0ca7c879d7baa116d10bce8efe70c2696e489025fee63689783246907b66a29a'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash '0ca7c879d7baa116d10bce8efe70c2696e489025fee63689783246907b66a29a'</description>
       <options>no_email_alert</options>
@@ -890,6 +1001,7 @@
       </mitre>
    </rule>
    <rule id="100112" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash 'bb561e98e284bdf90bf4c643daddf8cfaa191e002236181d73d595542a65fe0c'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash 'bb561e98e284bdf90bf4c643daddf8cfaa191e002236181d73d595542a65fe0c'</description>
       <options>no_email_alert</options>
@@ -898,6 +1010,7 @@
       </mitre>
    </rule>
    <rule id="100113" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">191.97.248.17</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 191.97.248.17</description>
       <options>no_email_alert</options>
@@ -906,6 +1019,7 @@
       </mitre>
    </rule>
    <rule id="100114" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">141.8.192.26</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 141.8.192.26</description>
       <options>no_email_alert</options>
@@ -914,6 +1028,7 @@
       </mitre>
    </rule>
    <rule id="100115" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">102.204.12.234</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 102.204.12.234</description>
       <options>no_email_alert</options>
@@ -922,6 +1037,7 @@
       </mitre>
    </rule>
    <rule id="100116" level="7">
+      <if_group>syslog</if_group>
       <field name="md5">File SHA-256 hash 'a4f21d385a35dfd62ff149ca6482f65d7832208eb6326f6595955b1a0f6c9448'</field>
       <description>Cognitive SOC: Malicious file hash execution blocked: File SHA-256 hash 'a4f21d385a35dfd62ff149ca6482f65d7832208eb6326f6595955b1a0f6c9448'</description>
       <options>no_email_alert</options>
@@ -930,6 +1046,7 @@
       </mitre>
    </rule>
    <rule id="100117" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">171.251.236.96</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 171.251.236.96</description>
       <options>no_email_alert</options>
@@ -938,6 +1055,7 @@
       </mitre>
    </rule>
    <rule id="100118" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">66.203.125.17</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 66.203.125.17</description>
       <options>no_email_alert</options>
@@ -946,6 +1064,7 @@
       </mitre>
    </rule>
    <rule id="100119" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">198.244.183.77</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 198.244.183.77</description>
       <options>no_email_alert</options>
@@ -954,6 +1073,7 @@
       </mitre>
    </rule>
    <rule id="100120" level="7">
+      <if_group>syslog</if_group>
       <field name="query">https://fontem.org/wp-admin/advisor_share_wealth_management/download.php/</field>
       <description>Cognitive SOC: Detected malicious DNS lookup for domain https://fontem.org/wp-admin/advisor_share_wealth_management/download.php/</description>
       <options>no_email_alert</options>
@@ -962,6 +1082,7 @@
       </mitre>
    </rule>
    <rule id="100121" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">91.149.216.62</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 91.149.216.62</description>
       <options>no_email_alert</options>
@@ -970,6 +1091,7 @@
       </mitre>
    </rule>
    <rule id="100122" level="7">
+      <if_group>syslog</if_group>
       <field name="srcip">198.244.226.94</field>
       <description>Cognitive SOC: Blocked communication to malicious IP address 198.244.226.94</description>
       <options>no_email_alert</options>
